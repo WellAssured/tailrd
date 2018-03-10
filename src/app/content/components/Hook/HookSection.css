@@ -97,32 +97,6 @@
   box-shadow: 1px 1px 5px #F2F2F2;
 }
 
-.moving-background {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  z-index: 0;
-}
-
-.moving-bubble {
-  position: absolute;
-  top: -50px;
-  animation: drop-down 5s infinite;
-  white-space: nowrap;
-  overflow: hidden;
-  font-size: 0.5em;
-  color: #000;
-  width: 250px;
-}
-@keyframes drop-down {
-  from {
-    top: -20px;
-  }
-  to {
-    top: 120%;
-  }
-}
-
 .word-you {
   color: #a34040;
 }
@@ -137,22 +111,6 @@
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-}
-
-.moving-logo {
-  position: absolute;
-  left: -50px;
-  transform: rotate(-45deg);
-  animation: fly-up 5s infinite;
-}
-
-@keyframes fly-up {
-  from {
-    transform: translate(0, 0) rotate(-45deg);
-  }
-  to {
-    transform: translate(75vw, -75vh) rotate(-45deg);
-  }
 }
 
 .app-header {

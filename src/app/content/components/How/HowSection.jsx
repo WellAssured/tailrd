@@ -35,7 +35,7 @@ const HowSection = () => (
       <div className="how-block-graphic">
         <Icon type="heart" style={{ fontSize: '3em' }}/>
       </div>
-      <div className="how-block-description">Get personalized advice and check-ins that enable your longest, healthiest life!</div>
+      <div className="how-block-description">Get personalized advice and check-ins that enable your healthiest life!</div>
     </div>
   </div>
 );

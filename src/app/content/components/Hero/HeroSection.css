@@ -1,6 +1,7 @@
 .hero-section {
   height: 40vh;
   background-color: #E1E6E1;
+  min-height: 350px;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
@@ -19,7 +20,7 @@
   width: 40px;
   height: 30px;
   margin: 0 0.5em 0.5em 0.5em;
-  animation: twirl 4s cubic-bezier(0.470, 0.000, 0.745, 0.715) infinite;
+  animation: twirl 4s cubic-bezier(0.470, 0.000, 0.745, 0.715);
 }
 @keyframes twirl {
   70% {transform:rotate(0deg); }
