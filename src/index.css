@@ -1,5 +1,18 @@
+/*
+Color scheme:
+  #023744 - | - text color on light background
+  #7C9397   | -- Blue (dark to light)
+  #99ABAD   |
+  #E1E6E1 - | - text color on dark background
+  #FFFFFF - white (accent)
+  #A78F5C - dark gold (branding)
+  #9A8458 - light gold (accent)
+*/
+
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
+  font-family: 'Playfair_Display';
+  font-size: 24px;
+  color: #E1E6E1;
 }

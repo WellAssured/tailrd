@@ -1,8 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import TailrdAppContainer from './app/main/TailrdAppContainer';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import './fonts.css';
+import 'antd/dist/antd.css';
+import './index.css';
+
+ReactDOM.render(<TailrdAppContainer />, document.getElementById('root'));
 registerServiceWorker();
