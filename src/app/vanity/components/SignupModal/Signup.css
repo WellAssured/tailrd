@@ -1,0 +1,55 @@
+.signup-modal > .ant-modal-content,
+.signup-modal > .ant-modal-content > .ant-modal-close,
+.signup-modal > .ant-modal-content > .ant-modal-header,
+.signup-modal > .ant-modal-content > .ant-modal-header > .ant-modal-title {
+  font-family: 'Lato';
+  font-size: 24px;
+  color: #E1E6E1;
+  background-color: #023744;
+}
+
+.signup-modal > .ant-modal-content > .ant-modal-close {
+  background-color: transparent;
+}
+
+.signup-form-container > .ant-form > .ant-form-item,
+.signup-form-container > .ant-form > .ant-form-item > .ant-form-item-label label,
+.signup-modal-title {
+  font-family: 'Lato';
+  font-size: 16px;
+  font-weight: 300;
+  color: #E1E6E1;
+  background-color: #023744;
+}
+
+.signup-form-container { 
+  padding-top: 2em;
+}
+
+.signup-form-submit {
+  display: flex;
+  justify-content: center;
+}
+
+.signup-form-submit > .signup-form-submit-button {
+  width: 100px;
+  height: 35px;
+  background-color: #9A8458;
+  border: 1px solid #E1E6E1;
+  box-shadow: 2px 2px 2px #9A8458;
+  font-size: 20px;
+  font-weight: 200;
+  color: #E1E6E1;
+}
+
+.signup-form-submit > .signup-form-submit-button:hover,
+.signup-form-submit > .signup-form-submit-button:focus,
+.signup-form-submit > .signup-form-submit-button:active {
+  width: 102px;
+  height: 37px;
+  transform: translate(0px, -2px);
+  background-color: #A78F5C;
+  border: none;
+  box-shadow: 2px 4px 5px #9A8458;
+  color: #E1E6E1;
+}

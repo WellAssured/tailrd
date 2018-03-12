@@ -7,7 +7,6 @@
   align-items: center;
   text-align: center;
   padding: 50px;
-  border-bottom: 2px solid #A78F5C;
 }
 
 .hero-title {
@@ -28,7 +27,6 @@
   100% { transform:rotate(0deg); }
 }
 
-
 .hero-section h2, p {
   color: #023744;
 }
@@ -43,6 +41,20 @@
   font-family: 'Lato';
   font-weight: 300;
   font-style: italic;
+}
+
+@media screen and (max-width: 800px) {
+  .hero-title {
+    font-size: 0.75em;
+  }
+  .hero-section p {
+    font-size: 0.75em;
+  }
+}
+@media screen and (max-width: 450px) {
+  .hero-section p {
+    font-size: 0.65em;
+  }
 }
 
 .hero-section .action-button {

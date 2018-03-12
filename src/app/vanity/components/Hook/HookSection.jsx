@@ -1,27 +1,19 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
-import logo from '../../../../assets/logo.svg';
 import './HookSection.css';
 
-const QUESTION_BANK = [
-  <span>does coffee give <span className="word-you">you</span> cancer?</span>,
-  <span>is the keto diet healthy for <span className="word-you">you</span>?</span>,
-  <span>how many calories do <span className="word-you">you</span> need in a day?</span>,
-  <span>diet that helps <span className="word-you">you</span> build muscle</span>,
-  <span>sources of iron if <span className="word-you">you</span>'re vegan?</span>,
-  <span>is detoxing healthy for <span className="word-you">you</span>?</span>
-];
-
-const HookSection = () => (
+const HookSection = (props) => (
   <div className="hook-section content-section">
     <div className="content-pane content-pane-left">
       <div className="content-pane-title">
-        <h3>Stop <span className="title-verb">searching</span>...</h3>
+        <h3>Stop <span className="negative-word title-verb">searching</span>...</h3>
+        <h5>Searching for health answers online leads to information that is generic and unhelpful, or worse, opinions that can actually be <span className="negative-word">harmful</span>.</h5>
       </div>
       <div className="content-app-container">
         <div className="content-app foogle-app-demo">
           <div className="foogle-search-box">
-            {QUESTION_BANK[5]}
+            {props.foogleQuestion}
           </div>
           <div className="foogle-search-button">
             Feeling Lucky?
@@ -31,13 +23,11 @@ const HookSection = () => (
     </div>
     <div className="content-pane content-pane-right">
       <div className="content-pane-title">
-        <h3>Start <span className="title-verb title-emphasis">learning.</span></h3>
+        <h3>Start <span className="positive-word title-verb">learning</span>.</h3>
+        <h5>Registered Dietitians are the only ones that can legally give diet advice to those with health conditions – so get your answers <span className="positive-word">tailored</span>.</h5>
       </div>
       <div className="content-app-container">
         <div className="content-app tailrd-app-demo">
-          <div className="app-header">
-            <img src={logo} className="small-logo" alt="logo"/>
-          </div>
           <div className="chat-bubble me-chat">
             <span>Hi again Lora! I've heard that pregnant women should stay away from seafood because of the mercury. Can I eat grilled salmon for dinner tonight?</span>
           </div>
@@ -52,5 +42,9 @@ const HookSection = () => (
     </div>
   </div>
 );
+
+HookSection.propTypes = {
+  foogleQuestion: PropTypes.element.isRequired,
+};
 
 export default HookSection;

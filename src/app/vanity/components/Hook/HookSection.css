@@ -5,16 +5,17 @@
 .content-pane {
   display: flex;
   flex-direction: column;
+  flex: 1;
   position: relative;
   width: 50%;
   overflow: hidden;
 }
 
 .content-pane-left {
-  border-right: 1px solid #A78F5C;
+  border: 1px solid #A78F5C;
 }
 .content-pane-right {
-  border-left: 1px solid #A78F5C;
+  border: 1px solid #A78F5C;
 }
 
 .content-pane-title {
@@ -24,16 +25,41 @@
   z-index: 2;
 }
 
+@media screen and (max-width: 800px) {
+  .hook-section {
+    height: 100vh;
+    flex-direction: column;
+  }
+  .content-pane {
+    width: 100%;
+  }
+}
+
 .content-pane-title h3{
   color: #E1E6E1;
   font-weight: 300;
+  margin-bottom: 0;
+}
+.content-pane-title h5 {
+  font-size: 0.6em;
+  font-style: italic;
+  font-weight: 300;
+  margin: 0 2em;
+  color: #E1E6E1;
+}
+
+.positive-word {
+  color: #9A8458;
+  font-weight: 800;
+}
+
+.negative-word {
+  color: #a34040;
+  font-weight: 800;
 }
 
 .title-verb {
   font-style: italic;
-}
-
-.title-emphasis {
   font-weight: 500;
 }
 
@@ -47,10 +73,10 @@
 
 .foogle-app-demo {
   font-family: Arial, Helvetica, sans-serif;
-  font-size: 16px;
+  font-size: 0.7em;
   color: #000;
   background-color: #E1E6E1;
-  height: 40%;
+  height: 60%;
   max-height: 250px;
   width: 80%;
   display: flex;
@@ -59,6 +85,13 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+}
+
+@media screen and (max-width: 500px) {
+  .foogle-app-demo {
+    width: 90%;
+    font-size: 0.6em;
+  }
 }
 
 .foogle-search-box {
@@ -105,25 +138,11 @@
   width: 60%;
   min-width: 300px;
   height: 100%;
-  background-color: #E1E6E1;
   border-radius: 15px 15px 0 0;
   align-self: flex-end;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-}
-
-.app-header {
-  height: 10%;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  border-bottom: 5px solid #023744;
-}
-
-.small-logo {
-  width: 40px;
-  height: 30px;
 }
 
 .chat-bubble {
