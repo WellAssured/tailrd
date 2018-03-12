@@ -30,7 +30,7 @@ class ContentContainer extends React.Component {
   handleSignupClose = () => this.setState({ showSignupModal: false });
   handleSignupSubmit = (form) => {
     // show spinner on modal
-    // submit form to Lambda
+    // submit form to Lambda and Lambda to Mailchimp
     this.setState({ showSignupModal: false });
   }
 
