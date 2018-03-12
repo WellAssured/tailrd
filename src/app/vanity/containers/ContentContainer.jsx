@@ -22,7 +22,7 @@ class ContentContainer extends React.Component {
     super();
     this.state = {
       foogleQuestionIndex: 0,
-      showSignupModal: true,
+      showSignupModal: false,
     };
   }
 
