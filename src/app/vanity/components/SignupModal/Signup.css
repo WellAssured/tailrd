@@ -46,7 +46,7 @@
 .signup-form-submit > .signup-form-submit-button:focus,
 .signup-form-submit > .signup-form-submit-button:active {
   width: 102px;
-  height: 37px;
+  height: 35px;
   transform: translate(0px, -2px);
   background-color: #A78F5C;
   border: none;

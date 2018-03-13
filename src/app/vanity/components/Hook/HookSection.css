@@ -8,6 +8,7 @@
   flex: 1;
   position: relative;
   width: 50%;
+  min-height: 400px;
   overflow: hidden;
 }
 
@@ -27,11 +28,13 @@
 
 @media screen and (max-width: 800px) {
   .hook-section {
-    height: 100vh;
     flex-direction: column;
   }
   .content-pane {
     width: 100%;
+  }
+  .content-pane-right {
+    min-height: 530px;
   }
 }
 
@@ -41,7 +44,7 @@
   margin-bottom: 0;
 }
 .content-pane-title h5 {
-  font-size: 0.6em;
+  font-size: 0.75em;
   font-style: italic;
   font-weight: 300;
   margin: 0 2em;
@@ -69,6 +72,7 @@
   justify-content: center;
   align-items: center;
   z-index: 2;
+  overflow: scroll;
 }
 
 .foogle-app-demo {
@@ -85,12 +89,12 @@
   align-items: center;
   border-radius: 5px;
   box-shadow: 0 2px 2px 0 rgba(0,0,0,0.16), 0 0 0 1px rgba(0,0,0,0.08);
+  padding: 2em 0;
 }
 
 @media screen and (max-width: 500px) {
   .foogle-app-demo {
     width: 90%;
-    font-size: 0.6em;
   }
 }
 
@@ -137,8 +141,8 @@
 .tailrd-app-demo {
   width: 60%;
   min-width: 300px;
-  height: 100%;
   border-radius: 15px 15px 0 0;
+  margin-bottom: 1em;
   align-self: flex-end;
   display: flex;
   flex-direction: column;
@@ -149,10 +153,10 @@
   border-radius: 15px;
   padding: 1em;
   font-family: 'Helvetica', sans-serif;
-  font-size: 0.5em;
+  font-size: 0.6em;
   max-width: 80%;
   position: relative;
-  margin: 0 1.5em;
+  margin: 0.5em 1.5em;
 }
 .chat-bubble:before {
   content: "";
@@ -160,7 +164,6 @@
   height: 0px;
   position: absolute;
 }
-/* gradient background color! */
 
 .me-chat {
   align-self: flex-end;

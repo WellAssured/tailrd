@@ -16,3 +16,9 @@ body {
   font-size: 24px;
   color: #E1E6E1;
 }
+
+@media screen and (max-width: 500px) {
+  body {
+    font-size: 20px;
+  }
+}

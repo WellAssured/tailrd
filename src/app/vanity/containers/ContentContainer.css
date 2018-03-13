@@ -2,11 +2,10 @@
   position: relative;
   flex: 1;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .content-section {
   width: 100%;
-  height: 50vh;
-  min-height: 500px;
   display: flex;
 }

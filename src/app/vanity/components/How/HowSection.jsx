@@ -10,7 +10,7 @@ const HowSection = () => (
     </div>
     <div className="how-block-container">
       <div className="how-block">
-        <div className="how-block-title">Sign Up</div>
+        <div className="how-block-title"><h3>Sign Up</h3></div>
         <div className="how-block-graphic">
           <Icon type="profile" style={{ fontSize: '3em' }}/>
         </div>
@@ -19,7 +19,7 @@ const HowSection = () => (
         </div>
       </div>
       <div className="how-block">
-        <div className="how-block-title">Connect</div>
+        <div className="how-block-title"><h3>Connect</h3></div>
         <div className="how-block-graphic">
           {/* <div className="how-block-graphic-row">
             <Icon type="video-camera" className="how-icon" style={{ fontSize: '1.5em' }} />
@@ -35,7 +35,7 @@ const HowSection = () => (
         </div>
       </div>
       <div className="how-block">
-        <div className="how-block-title">Be Healthy</div>
+        <div className="how-block-title"><h3>Be Healthy</h3></div>
         <div className="how-block-graphic">
           <Icon type="heart" style={{ fontSize: '3em' }}/>
         </div>

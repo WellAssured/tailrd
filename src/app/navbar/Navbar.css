@@ -30,3 +30,16 @@
   margin: 0 0.5em;
   font-size: 1.25em;
 }
+
+@media screen and (max-width: 800px) {
+  .navbar {
+    height: 2em;
+    padding: 5px;
+  }
+  .navbar-brand-container {
+    margin-left: 10px;
+  }
+  .brand-name {
+    font-size: 1em;
+  }
+}
