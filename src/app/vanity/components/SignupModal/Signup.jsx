@@ -65,9 +65,10 @@ class Signup extends React.Component {
                 <Button
                   className="signup-form-submit-button"
                   type="submit"
+                  loading={this.props.isLoading}
                   onClick={this.handleSubmit}
                 >
-                  Submit
+                  {this.props.isLoading ? undefined : "Submit"}
                 </Button>
               </div>
             </Form>
@@ -80,6 +81,7 @@ class Signup extends React.Component {
 
 Signup.propTypes = {
   visible: PropTypes.bool.isRequired,
+  isLoading: PropTypes.bool.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
 };

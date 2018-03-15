@@ -23,15 +23,15 @@ class ContentContainer extends React.Component {
     this.state = {
       foogleQuestionIndex: 0,
       showSignupModal: false,
+      isLoading: false,
     };
   }
 
   handleSignupClick = () => this.setState({ showSignupModal: true });
   handleSignupClose = () => this.setState({ showSignupModal: false });
   handleSignupSubmit = (form) => {
-    // show spinner on modal
-    // submit form to Lambda and Lambda to Mailchimp
-    this.setState({ showSignupModal: false });
+    this.setState({ isLoading: true });
+    /* need a fetch request to send form to API Gateway and Lambda */
   }
 
   rotateFoogleQuestion = () =>
@@ -57,6 +57,7 @@ class ContentContainer extends React.Component {
         <HowSection />
         <Signup
           visible={this.state.showSignupModal}
+          isLoading={this.state.isLoading}
           onClose={this.handleSignupClose}
           onSubmit={this.handleSignupSubmit}
         />
