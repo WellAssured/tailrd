@@ -26,6 +26,16 @@
   padding-top: 2em;
 }
 
+.error-message {
+  text-align: center;
+  color: #f5222d;
+}
+
+.signup-success-text {
+  font-size: 20px !important;
+  margin-bottom: 2em;
+}
+
 .signup-form-submit {
   display: flex;
   justify-content: center;

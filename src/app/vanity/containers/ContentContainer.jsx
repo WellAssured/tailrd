@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import './ContentContainer.css';
 import Signup from '../components/SignupModal/Signup';
@@ -24,14 +25,36 @@ class ContentContainer extends React.Component {
       foogleQuestionIndex: 0,
       showSignupModal: false,
       isLoading: false,
+      signupStatus: "",
+      signupMessage: ""
     };
   }
 
   handleSignupClick = () => this.setState({ showSignupModal: true });
   handleSignupClose = () => this.setState({ showSignupModal: false });
+  handleSignupSuccess = (response) => {
+    this.setState({
+      isLoading: false,
+      signupStatus: "success",
+      signupMessage: "You should hear from us real soon."
+    });
+  }
+  handleSignupFailure = (error) => {
+    let signupMessage = "Something went wrong. Please try again later.";
+    if (error.response.data.errorResponseData.status === 400) { // error.response.data.errorResponseData.title === 'Member Exists'
+      signupMessage = "Looks like you've already signed up with this email address."
+    }
+    this.setState({ isLoading: false, signupStatus: "error", signupMessage });
+  }
   handleSignupSubmit = (form) => {
+    // show spinner on modal
+    // submit form to Lambda and Lambda to Mailchimp
+    const mailingURL = "https://api.tailrdnutrition.com/v1/tailrd-mailinglist";
+    axios.post(mailingURL, { ...form }, { headers: { "Content-Type": "multipart/form-data"} })
+      .then(response => this.handleSignupSuccess(response))
+      .catch(error => this.handleSignupFailure(error));
+
     this.setState({ isLoading: true });
-    /* need a fetch request to send form to API Gateway and Lambda */
   }
 
   rotateFoogleQuestion = () =>
@@ -58,6 +81,8 @@ class ContentContainer extends React.Component {
         <Signup
           visible={this.state.showSignupModal}
           isLoading={this.state.isLoading}
+          signupStatus={this.state.signupStatus}
+          signupMessage={this.state.signupMessage}
           onClose={this.handleSignupClose}
           onSubmit={this.handleSignupSubmit}
         />
