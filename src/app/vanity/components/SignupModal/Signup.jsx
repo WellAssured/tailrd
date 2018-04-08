@@ -85,7 +85,7 @@ class Signup extends React.Component {
   }
 
   handleSubmit = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     this.setState({ attemptedSubmit: true });
     if (this.validateForm()) {
       this.props.onSubmit({
@@ -161,6 +161,11 @@ class Signup extends React.Component {
                 className="signup-form-submit-button"
                 type="submit"
                 onClick={this.handleSubmit}
+                /* autotrack DOM attributes */
+                ga-on="click"
+                ga-event-category="TOFU"
+                ga-event-action="click"
+                ga-event-label="Subscribe to Newsletter"
               >Submit</Button>
             }
           </div>

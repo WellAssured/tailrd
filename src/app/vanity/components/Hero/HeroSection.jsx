@@ -22,6 +22,11 @@ const HeroSection = (props) => (
       type="primary"
       className="action-button"
       onClick={props.onSignupClick}
+      /* autotrack DOM attributes */
+      ga-on="click"
+      ga-event-category="TOFU"
+      ga-event-action="click"
+      ga-event-label="Call to Action"
     >
       Get <span className="action-button-brand">tailRD</span>
     </Button>
