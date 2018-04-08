@@ -1,7 +1,4 @@
 /* Google Analytics and autotrack.js */
-import 'autotrack/lib/plugins/event-tracker';
-import 'autotrack/lib/plugins/page-visibility-tracker';
-import 'autotrack/lib/plugins/media-query-tracker';
 
 const ga = window.ga;
 
