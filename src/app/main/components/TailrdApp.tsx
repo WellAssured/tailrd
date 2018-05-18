@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import * as React from 'react';
 import Navbar from '../../navbar';
 import ContentContainer from '../../vanity';
 import './TailrdApp.css';
 
-export default class TailrdApp extends Component {
+export default class TailrdApp extends React.Component {
   render() {
     return (
       <div className="tailRD-app">

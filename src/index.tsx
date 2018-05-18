@@ -1,10 +1,10 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
 import TailrdAppContainer from './app/main/TailrdAppContainer';
 import registerServiceWorker from './registerServiceWorker';
 
 /* Google Analytics and autotrack.js */
-import './analytics/tailrdTracker.js';
+import './analytics/tailrdTracker.ts';
 
 import './fonts.css';
 import 'antd/dist/antd.css';

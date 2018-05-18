@@ -1,16 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { Modal, Form, Input, Button, Icon } from 'antd';
 
 import './Signup.css';
 
-class Signup extends React.Component {
-  constructor(props) {
+interface IProps {
+  visible: boolean;
+  isLoading: boolean;
+  signupStatus: string;
+  signupMessage: string;
+  onSubmit: (form: Object) => void;
+  onClose: () => void;
+}
+
+interface IState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  attemptedSubmit: boolean;
+  formFeedback: {
+    firstName: {},
+    lastName: {},
+    email: {},
+  };
+}
+
+class Signup extends React.Component<IProps, IState> {
+  constructor(props: IProps) {
     super(props);
     this.state = {
-      firstName: "",
-      lastName: "",
-      email: "",
+      firstName: '',
+      lastName: '',
+      email: '',
       attemptedSubmit: false,
       formFeedback: {
         firstName: {},
@@ -20,50 +40,50 @@ class Signup extends React.Component {
     };
   }
 
-  validateForm = (inputName) => {
+  validateForm = (inputName?: string) => {
     // validate form here
     let formValid = true;
     let formFeedback = this.state.formFeedback;
     // If inputName is defined, only validate the specified target
-    if (!inputName || inputName === "firstName") {
+    if (!inputName || inputName === 'firstName') {
       if (!this.state.firstName) {
         formValid = false;
         formFeedback.firstName = {
-          validateStatus: "error",
+          validateStatus: 'error',
           hasFeedback: true,
-          help: "We're going to need your first name..."
+          help: 'We\'re going to need your first name...'
         };
       } else {
         formFeedback.firstName = {};
       }
     }
-    if (!inputName || inputName === "lastName") {
+    if (!inputName || inputName === 'lastName') {
       if (!this.state.lastName) {
         formValid = false;
         formFeedback.lastName = {
-          validateStatus: "error",
+          validateStatus: 'error',
           hasFeedback: true,
-          help: "We're also going to need your last name..."
+          help: 'We\'re also going to need your last name...'
         };
       } else {
         formFeedback.lastName = {};
       }
     }
-    if (!inputName || inputName === "email") {
+    if (!inputName || inputName === 'email') {
       if (!this.state.email) {
         formValid = false;
         formFeedback.email = {
-          validateStatus: "error",
+          validateStatus: 'error',
           hasFeedback: true,
-          help: "We're definitely going to need your email..."
+          help: 'We\'re definitely going to need your email...'
         };
       } else if (!(/(.+)@(.+){2,}\.(.+){2,}/.test(this.state.email))) {
         formValid = false;
         formFeedback.email = this.state.attemptedSubmit ? {
-          validateStatus: "error",
+          validateStatus: 'error',
           hasFeedback: true,
-          help: "This doesn't look like a valid email address."
-        }: {};
+          help: 'This doesn\'t look like a valid email address.'
+        } : {};
       } else {
         formFeedback.email = {};
       }
@@ -74,17 +94,17 @@ class Signup extends React.Component {
 
   renderHeader = () => (
     <div className="signup-modal-header">
-      {this.props.signupStatus === 'success' ? "You're on the list!" : "Why, hello there!"}
+      {this.props.signupStatus === 'success' ? 'You\'re on the list!' : 'Why, hello there!'}
     </div>
   )
 
-  handleChange = (e) => {
+  handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
-    const inputName = e.target.name;
-    this.setState({ [inputName]: e.target.value }, () => this.validateForm(inputName));
+    const inputName = e.currentTarget.name;
+    this.setState({ [inputName as keyof IState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
   }
 
-  handleSubmit = (e) => {
+  handleSubmit = () => {
     // e.preventDefault();
     this.setState({ attemptedSubmit: true });
     if (this.validateForm()) {
@@ -101,7 +121,7 @@ class Signup extends React.Component {
       <div className="signup-modal-title">
         You're here a bit early.<br/>
         Leave your email and we'll let you know when it's ready for you.
-       {this.props.signupStatus === "error" && <div className="error-message">{this.props.signupMessage}</div>}
+       {this.props.signupStatus === 'error' && <div className="error-message">{this.props.signupMessage}</div>}
       </div>
       <div className="signup-form-container">
         <Form
@@ -120,7 +140,9 @@ class Signup extends React.Component {
               value={this.state.firstName}
               onChange={this.handleChange}
               onPressEnter={this.handleSubmit}
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="What should we call you?" 
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} 
+              placeholder="What should we call you?"
+              autoComplete="given-name"
             />
           </Form.Item>
           <Form.Item
@@ -135,7 +157,9 @@ class Signup extends React.Component {
               value={this.state.lastName}
               onChange={this.handleChange}
               onPressEnter={this.handleSubmit}
-              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="and what's your last name?" 
+              prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="and what's your last name?"
+              autoComplete="family-name"
             />
           </Form.Item>
           <Form.Item
@@ -150,7 +174,9 @@ class Signup extends React.Component {
               value={this.state.email}
               onChange={this.handleChange}
               onPressEnter={this.handleSubmit}
-              prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />} placeholder="Where can we reach you?" 
+              prefix={<Icon type="mail" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              placeholder="Where can we reach you?"
+              autoComplete="email"
             />
           </Form.Item>
           <div className="signup-form-submit">
@@ -159,20 +185,22 @@ class Signup extends React.Component {
               :
               <Button
                 className="signup-form-submit-button"
-                type="submit"
+                htmlType="submit"
                 onClick={this.handleSubmit}
                 /* autotrack DOM attributes */
                 ga-on="click"
                 ga-event-category="TOFU"
                 ga-event-action="click"
                 ga-event-label="Subscribe to Newsletter"
-              >Submit</Button>
+              >
+                Submit
+              </Button>
             }
           </div>
         </Form>
       </div>
     </div>
-  );
+  )
 
   render() {
     return (
@@ -184,7 +212,7 @@ class Signup extends React.Component {
         footer={null}
       >
         {
-          this.props.signupStatus === "success" ?
+          this.props.signupStatus === 'success' ?
           <div className="signup-modal-container">
             <div className="signup-success-text">{this.props.signupMessage}</div>
             <div className="signup-form-submit">
@@ -203,15 +231,5 @@ class Signup extends React.Component {
     );
   }
 }
-
-Signup.propTypes = {
-  visible: PropTypes.bool.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  signupStatus: PropTypes.string,
-  signupMessage: PropTypes.string,
-  onSubmit: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
 
 export default Signup;

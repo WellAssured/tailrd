@@ -1,4 +1,8 @@
 /* Google Analytics and autotrack.js */
+/* tslint:disable-next-line */
+interface Window {
+  ga: any;
+}
 
 const ga = window.ga;
 

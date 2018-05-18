@@ -1,12 +1,15 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 
 import './HeroSection.css';
 import { Button } from 'antd';
 
 import logo from '../../../../assets/logo.svg';
 
-const HeroSection = (props) => (
+interface IProps {
+  onSignupClick: () => void;
+}
+
+const HeroSection = (props: IProps) => (
   <div className="hero-section content-section">
     <div className="hero-title">
       <h2>Personal Health</h2>
@@ -32,9 +35,5 @@ const HeroSection = (props) => (
     </Button>
   </div>
 );
-
-HeroSection.propTypes = {
-  onSignupClick: PropTypes.func.isRequired,
-};
 
 export default HeroSection;

@@ -1,9 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 
 import './HookSection.css';
 
-const HookSection = (props) => (
+interface IProps {
+  foogleQuestion: JSX.Element;
+}
+
+const HookSection = (props: IProps) => (
   <div className="hook-section content-section">
     <div className="content-pane content-pane-left">
       <div className="content-pane-title">
@@ -42,9 +45,5 @@ const HookSection = (props) => (
     </div>
   </div>
 );
-
-HookSection.propTypes = {
-  foogleQuestion: PropTypes.element.isRequired,
-};
 
 export default HookSection;

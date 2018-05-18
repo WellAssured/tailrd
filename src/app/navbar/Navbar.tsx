@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Row, Col } from 'antd';
 import logo from '../../assets/logo.svg';
 
