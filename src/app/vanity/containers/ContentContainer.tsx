@@ -53,7 +53,7 @@ class ContentContainer extends React.Component<IProps, IState> {
   }
   handleSignupFailure = (error: AxiosError) => {
     let signupMessage = 'Something went wrong. Please try again later.';
-    if (error.response.data.errorResponseData.status === 400) { // error.response.data.errorResponseData.title === 'Member Exists'
+    if (error.response!.data.errorResponseData.status === 400) { // error.response.data.errorResponseData.title === 'Member Exists'
       signupMessage = 'Looks like you\'ve already signed up with this email address.';
     }
     this.setState({ isLoading: false, signupStatus: 'error', signupMessage });
