@@ -29,6 +29,7 @@
 .brand-name {
   margin: 0 0.5em;
   font-size: 1.25em;
+  color: #E1E6E1;
 }
 
 @media screen and (max-width: 800px) {
@@ -42,4 +43,13 @@
   .brand-name {
     font-size: 1em;
   }
+}
+
+.link-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.active-nav-link {
+  color: red;
 }
