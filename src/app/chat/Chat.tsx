@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { graphqlOperation } from 'aws-amplify';
-import { withAuthenticator, Connect } from 'aws-amplify-react';
+import { Connect } from 'aws-amplify-react';
 
 import queries from './graphql/queries';
 
@@ -16,4 +16,4 @@ const Chat = () => (
   </Connect>
 );
 
-export default withAuthenticator(Chat);
+export default Chat;

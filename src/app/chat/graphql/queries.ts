@@ -13,7 +13,10 @@ export default {
               createdTime
               lastActiveTime
               lastMessageSummary
-              participants
+              participants {
+                cognitoId
+                username
+              }
             }
             messages {
               items {

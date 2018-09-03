@@ -1,0 +1,113 @@
+.auth-container {
+  background-color: #023744;
+  padding: 20px;
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.auth-container > .auth-card {
+  max-width: 520px;
+  width: 100%;
+}
+
+.auth-container > .login-card {
+  height: 300px;
+}
+
+.auth-container > .auth-card,
+.auth-container > .auth-card > .ant-card-body > .auth-form > .ant-form,
+.auth-container > .auth-card > .ant-card-body > .auth-form > .ant-form > .ant-form-item,
+.auth-container > .auth-card > .ant-card-body > .auth-form > .ant-form > .ant-form-item > .ant-form-item-label,
+.auth-container > .auth-card > .ant-card-body > .auth-form > .ant-form > .ant-form-item > .ant-form-item-label label,
+.auth-form,
+.auth-form > .ant-form, 
+.auth-form > .ant-form > .ant-form-item, 
+.auth-form > .ant-form > .ant-form-item > .ant-form-item-label, 
+.auth-form > .ant-form > .ant-form-item > .ant-form-item-label label {
+  font-family: 'Lato';
+  font-size: 16px;
+  font-weight: 300;
+  color: #E1E6E1;
+  background-color: #023744;
+}
+
+.auth-card > .ant-card-head,
+.auth-card > .ant-card-head > .ant-card-head-wrapper,
+.auth-card > .ant-card-head > .ant-card-head-wrapper > .ant-card-head-title {
+  font-family: 'Lato';
+  font-size: 24px;
+  color: #E1E6E1;
+  background-color: #023744;
+}
+
+.auth-form-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.form-submit {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.form-submit > .submit-button {
+  width: 100px;
+  height: 35px;
+  background-color: #9A8458;
+  border: 1px solid #E1E6E1;
+  box-shadow: 2px 2px 2px #9A8458;
+  font-size: 20px;
+  font-weight: 200;
+  color: #E1E6E1;
+}
+
+.form-submit > .submit-button:hover,
+.form-submit > .submit-button:focus,
+.form-submit > .submit-button:active {
+  width: 102px;
+  height: 35px;
+  transform: translate(0px, -2px);
+  background-color: #A78F5C;
+  border: none;
+  box-shadow: 2px 4px 5px #9A8458;
+  color: #E1E6E1;
+}
+
+.form-submit-link {
+  margin-top: 20px;
+}
+.form-submit-link > .form-nav-link {
+  text-decoration: underline;
+}
+.form-nav-link {
+  font-size: 16px;
+  font-weight: 200;
+  color: #E1E6E1;
+}
+.form-nav-link:hover {
+  text-decoration: none;
+  color: #A78F5C;
+}
+
+.signup-modal > .ant-modal-content,
+.signup-modal > .ant-modal-content > .ant-modal-close,
+.signup-modal > .ant-modal-content > .ant-modal-header,
+.signup-modal > .ant-modal-content > .ant-modal-header > .ant-modal-title {
+  font-family: 'Lato';
+  font-size: 24px;
+  color: #E1E6E1;
+  background-color: #023744;
+}
+
+.signup-modal > .ant-modal-content > .ant-modal-close {
+  background-color: transparent;
+}
+
+.form-error-message {
+  text-align: center;
+  color: #f5222d;
+}

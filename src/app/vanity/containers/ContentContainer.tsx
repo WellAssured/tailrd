@@ -1,8 +1,8 @@
 import * as React from 'react';
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import { Redirect } from 'react-router';
 
 import './ContentContainer.css';
-import Signup from '../components/SignupModal/Signup';
+import { Register } from '../../auth';
 import HeroSection from '../components/Hero/HeroSection';
 import HookSection from '../components/Hook/HookSection';
 import HowSection from '../components/How/HowSection';
@@ -18,14 +18,14 @@ const QUESTION_BANK = [
   <span key="7">is raw milk better for <span className="word-you">you</span>?</span>
 ];
 
-interface IProps {}
+interface IProps {
+  authenticated: boolean;
+}
 
 interface IState {
+  goToChat: boolean;
   foogleQuestionIndex: number;
   showSignupModal: boolean;
-  isLoading: boolean;
-  signupStatus: string;
-  signupMessage: string;
   timeoutId: number;
 }
 
@@ -33,41 +33,21 @@ class ContentContainer extends React.Component<IProps, IState> {
   constructor(props: IProps) {
     super(props);
     this.state = {
+      goToChat: false,
       foogleQuestionIndex: 0,
       showSignupModal: false,
-      isLoading: false,
-      signupStatus: '',
-      signupMessage: '',
       timeoutId: -1
     };
   }
 
-  handleSignupClick = () => this.setState({ showSignupModal: true });
-  handleSignupClose = () => this.setState({ showSignupModal: false });
-  handleSignupSuccess = (response: AxiosResponse) => {
-    this.setState({
-      isLoading: false,
-      signupStatus: 'success',
-      signupMessage: 'You should hear from us real soon.'
-    });
-  }
-  handleSignupFailure = (error: AxiosError) => {
-    let signupMessage = 'Something went wrong. Please try again later.';
-    if (error.response!.data.errorResponseData.status === 400) { // error.response.data.errorResponseData.title === 'Member Exists'
-      signupMessage = 'Looks like you\'ve already signed up with this email address.';
+  handleSignupClick = () => {
+    if (this.props.authenticated) {
+      this.setState({ goToChat: true });
+    } else {
+      this.setState({ showSignupModal: true });
     }
-    this.setState({ isLoading: false, signupStatus: 'error', signupMessage });
   }
-  handleSignupSubmit = (form: Object) => {
-    // show spinner on modal
-    // submit form to Lambda and Lambda to Mailchimp
-    const mailingURL = 'https://api.tailrdnutrition.com/v1/tailrd-mailinglist';
-    axios.post(mailingURL, { ...form }, { headers: { 'Content-Type': 'multipart/form-data'} })
-      .then(response => this.handleSignupSuccess(response))
-      .catch(error => this.handleSignupFailure(error));
-
-    this.setState({ isLoading: true });
-  }
+  handleSignupClose = () => this.setState({ showSignupModal: false });
 
   rotateFoogleQuestion = () =>
     this.setState({
@@ -85,20 +65,20 @@ class ContentContainer extends React.Component<IProps, IState> {
   }
 
   render() {
+    if (this.state.goToChat) {
+      return <Redirect to="/chat" />;
+    }
     return (
       <div className="content-container">
         <HeroSection onSignupClick={this.handleSignupClick}/>
         <HookSection foogleQuestion={QUESTION_BANK[this.state.foogleQuestionIndex]} />
         <HowSection />
-        <Signup
+        <Register
           visible={this.state.showSignupModal}
-          isLoading={this.state.isLoading}
-          signupStatus={this.state.signupStatus}
-          signupMessage={this.state.signupMessage}
           onClose={this.handleSignupClose}
-          onSubmit={this.handleSignupSubmit}
+          inModal={true}
         />
-      </div>
+      </div>          
     );
   }
 }

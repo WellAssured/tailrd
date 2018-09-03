@@ -1,11 +1,17 @@
 import * as React from 'react';
-import { Row, Col } from 'antd';
+import { withRouter, RouteComponentProps } from 'react-router';
+import { Link, NavLink } from 'react-router-dom';
+import { Row, Col, Button } from 'antd';
 import logo from '../../assets/logo.svg';
 
 import './Navbar.css';
-import { Link, NavLink } from 'react-router-dom';
 
-const Navbar = () => (
+interface INavProps extends RouteComponentProps<{}> {
+  isSignedIn: boolean;
+  onSignOut: () => void;
+}
+
+const Navbar = (props: INavProps) => (
   <Row type="flex" justify="space-between" className="navbar">
     <Col sm={4} md={8}>
       <div className="navbar-brand-container">
@@ -13,14 +19,28 @@ const Navbar = () => (
         <Link to="/"><span className="brand-name">tailRD</span></Link>
       </div>
     </Col>
-    <Col sm={4} md={4}>
-      <div className="link-container">
-        <div className="nav-link-container">
-          <NavLink to="/chat" activeClassName="active-nav-link" >Chat</NavLink>
-        </div>
+    <Col sm={4} md={6} className="nav-link-container-container">
+      <div className="nav-link-container">
+        {props.isSignedIn ?
+          <Button
+            className="logout-button"
+            shape="circle"
+            icon="logout"
+            title="Sign Out"
+            ghost={true}
+            onClick={() => {
+              props.history.push('/');
+              props.onSignOut();
+            }}
+          /> :  
+          <NavLink to="/signin" className="navbar-link" activeClassName="active-nav-link">Sign In</NavLink>
+        }
+        { /*
+        <NavLink to="/signup" className="navbar-link navbar-link-action" activeClassName="active-nav-link">Sign Up</NavLink>
+        */ }
       </div>
     </Col>
   </Row>
 );
 
-export default Navbar;
+export default withRouter(Navbar);
