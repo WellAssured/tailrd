@@ -1,3 +1,9 @@
-.chat-data {
-  color: white;
+.chat-app {
+  padding: 20px;
+  display: flex;
+  flex: 1 1 auto;
 }
+
+.conversationList-container {}
+
+.messageList-container {}
