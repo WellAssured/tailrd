@@ -15,7 +15,7 @@ class ConversationList extends React.Component<IConversationListProps, IConversa
 
   render() {
     return (
-      <div className="conversationList">
+      <div className="chat-list conversationList">
         {this.props.conversations.map((c, i) =>
           <Conversation key={`convo-${i}`} conversation={c} />
         )}

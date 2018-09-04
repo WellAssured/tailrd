@@ -11,9 +11,11 @@ interface IConversationProps {
 }
 
 const Conversation = (props: IConversationProps) => (
-  <div className="conversation">
+  <div className="chat-item conversation">
     <div className="conversation-participants">{props.conversation.participants}</div>
-    <div className="conversation-lastActiveTime">{props.conversation.lastActiveTime}</div>
+    {/* <div className="conversation-lastActiveTime">{
+      (new Date(props.conversation.lastActiveTime)).toLocaleString()
+    }</div> */}
     <div className="conversation-lastMessageSummary">{props.conversation.lastMessageSummary}</div>
   </div>
 );

@@ -1,9 +1,68 @@
-.chat-app {
+.tailRD-app > .chat-app {
   padding: 20px;
   display: flex;
   flex: 1 1 auto;
+  justify-content: flex-end;
 }
+
+.list-container {}
 
 .conversationList-container {}
 
 .messageList-container {}
+
+.chat-item {
+  padding: 5px;
+}
+
+.conversation-participants {
+  font-family: 'Playfair_Display';
+  font-size: 16px;
+  font-weight: 300;
+  color: #E1E6E1;
+}
+
+.conversation-lastMessageSummary {
+  font-family: 'Lato';
+  font-size: 14px;
+  font-weight: 300;
+  color: #E1E6E1;
+}
+
+.messageList-messageBox {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.messageList {
+  flex: 1 1 auto;
+  overflow: scroll;
+}
+
+.messageBox {
+  height: 75px;
+  flex: 0;
+}
+
+.message {
+  margin-bottom: 15px;
+}
+
+.message-float-right {
+  text-align: right;
+}
+.message-header {
+  font-family: 'Playfair_Display';
+  font-size: 20px;
+  font-weight: 300;
+  color: #E1E6E1;
+}
+.message-content {
+  font-family: 'Lato';
+  font-size: 16px;
+  font-weight: 300;
+  color: #E1E6E1;
+}
+

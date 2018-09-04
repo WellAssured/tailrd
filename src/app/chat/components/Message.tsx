@@ -11,10 +11,9 @@ interface IMessageProps {
 }
 
 const Message = (props: IMessageProps) => (
-  <div className="message">
+  <div className="chat-item message" title={(new Date(props.message.timestamp)).toLocaleString()}>
     <div className="message-header">
       <div className="message-sender">{props.message.sender}</div>
-      <div className="message-timestamp">{props.message.timestamp}</div>
     </div>
     <div className="message-content">{props.message.content}</div>
   </div>

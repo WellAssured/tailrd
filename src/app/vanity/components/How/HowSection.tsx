@@ -12,7 +12,7 @@ const HowSection = () => (
       <div className="how-block">
         <div className="how-block-title"><h3>Sign Up</h3></div>
         <div className="how-block-graphic">
-          <Icon type="profile" style={{ fontSize: '3em' }}/>
+          <Icon type="profile" style={{ fontSize: '3em', margin: 'auto' }}/>
         </div>
         <div className="how-block-description">
           Set up your profile by answering a few questions about your personal health.
@@ -26,7 +26,7 @@ const HowSection = () => (
             <Icon type="phone" className="how-icon" style={{ fontSize: '1.5em' }} />
           </div>
           <div className="how-block-graphic-row"> */}
-            <Icon type="message" className="how-icon" style={{ fontSize: '3em' }} />
+            <Icon type="message" className="how-icon" style={{ fontSize: '3em', margin: 'auto' }} />
             {/* <Icon type="mail" className="how-icon" style={{ fontSize: '1.5em' }} />
           </div> */}
         </div>
@@ -37,7 +37,7 @@ const HowSection = () => (
       <div className="how-block">
         <div className="how-block-title"><h3>Be Healthy</h3></div>
         <div className="how-block-graphic">
-          <Icon type="heart" style={{ fontSize: '3em' }}/>
+          <Icon type="heart" style={{ fontSize: '3em', margin: 'auto' }}/>
         </div>
         <div className="how-block-description">Get personalized advice and check-ins and unlock your healthiest life!</div>
       </div>
