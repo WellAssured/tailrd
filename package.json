@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.2.3",
+    "antd": "^3.9.1",
     "aws-amplify": "^1.0.6",
     "aws-amplify-react": "^1.0.6",
     "axios": "^0.18.0",
     "npm": "^5.10.0",
-    "react": "^16.2.0",
+    "react": "^16.4.2",
     "react-dom": "^16.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "^2.16.0"
@@ -22,7 +22,8 @@
   "devDependencies": {
     "@types/jest": "^22.2.3",
     "@types/node": "^10.1.0",
-    "@types/react": "^16.3.14",
+    "@types/prop-types": "^15.5.5",
+    "@types/react": "^16.4.13",
     "@types/react-dom": "^16.0.5",
     "@types/react-router": "^4.0.30",
     "@types/react-router-dom": "^4.3.0",

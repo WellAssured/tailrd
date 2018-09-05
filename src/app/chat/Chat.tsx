@@ -1,15 +1,15 @@
 import * as React from 'react';
-import { graphqlOperation, Auth } from 'aws-amplify';
+import { graphqlOperation, Auth, API } from 'aws-amplify';
 import { Connect } from 'aws-amplify-react';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import { Row, Col } from 'antd';
 
 import queries, { IGetUserQueryResult } from './graphql/queries';
+import mutations from './graphql/mutations';
 import ConversationList from './components/ConversationList';
 import MessageList from './components/MessageList';
 
 import './Chat.css';
-import { IMessage } from './components/Message';
 
 interface IChatProps {}
 interface IChatState {
@@ -24,9 +24,11 @@ class Chat extends React.Component<IChatProps, IChatState> {
     Auth.currentAuthenticatedUser().then(u => this.setState({ user: u }));
   }
 
-  onSendMessage = (conversationId: string, message: IMessage) => {
+  onSendMessage = (conversationId: string, message: string) => {
     console.log(conversationId);
-    console.log(message.content);
+    console.log(message);
+    console.log(this.state.user!.getUsername());
+    API.graphql(graphqlOperation(mutations.send, {convoId: conversationId, content: message}));
   }
 
   unpackConversations = (data: IGetUserQueryResult) => {
@@ -50,9 +52,9 @@ class Chat extends React.Component<IChatProps, IChatState> {
   renderMessageList(data: any) {
     return (
       <MessageList
-        handleNewMessage={(message: IMessage) => this.onSendMessage(
+        handleNewMessage={(content: string) => this.onSendMessage(
           data.data.getUser.conversations.items[this.state.activeConversation].conversationId,
-          message
+          content
         )}
         messages={this.unpackMessages(data.data.getUser)}
         currentUser={this.state.user!}

@@ -11,8 +11,28 @@
 
 .messageList-container {}
 
+.chat-list {
+  overflow: scroll;
+}
+
 .chat-item {
   padding: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.conversationList {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  border: 1px solid;
+}
+
+.conversation {
+  border: 2px solid #A78F5C;
+  border-radius: 5px;
+  cursor: pointer;
+  margin: 5px;
 }
 
 .conversation-participants {
@@ -32,13 +52,13 @@
 .messageList-messageBox {
   width: 100%;
   height: 100%;
+  padding: 15px 15px 0;
   display: flex;
   flex-direction: column;
 }
 
 .messageList {
   flex: 1 1 auto;
-  overflow: scroll;
 }
 
 .messageBox {
@@ -60,9 +80,45 @@
   color: #E1E6E1;
 }
 .message-content {
+  background-color: #7C9397;
   font-family: 'Lato';
   font-size: 16px;
   font-weight: 300;
   color: #E1E6E1;
+  padding: 10px;
+  border-radius: 10px;
 }
 
+.message-float-left > .message > .message-content {
+  margin-right: auto;
+  background-color: #A78F5C;
+}
+
+.message-float-right > .message > .message-content {
+  margin-left: auto;
+}
+
+.message-box {
+  display: flex;
+  align-items: center;
+}
+
+.send-message-button {
+  cursor: pointer;
+  color: #9A8458;
+  font-size: 32px;
+  margin-left: 10px;
+  align-self: flex-end;
+}
+
+.send-message-button:hover {
+  color: #A78F5C;
+}
+
+.cannot-send {
+  color: #ccc;
+}
+.cannot-send:hover {
+  color: #ccc;
+  cursor: default;
+}

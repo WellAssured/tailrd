@@ -1,10 +1,11 @@
 import * as React from 'react';
+import { Input, Icon } from 'antd';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 import Message, { IMessage } from './Message';
 
 interface IMessageListProps {
-  handleNewMessage: (message: IMessage) => void;
+  handleNewMessage: (content: string) => void;
   messages: IMessage[];
   currentUser: CognitoUser;
   participants: {
@@ -20,8 +21,41 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
   constructor(props: IMessageListProps) {
     super(props);
     this.state = {
-      message: 'NEW MESSAGE TEXT',
+      message: '',
     };
+  }
+
+  sendMessage = () => {
+    if (this.state.message.length > 0) {
+      const content = this.state.message;
+      this.setState({ message: '' });
+      this.props.handleNewMessage(content);
+    }
+  }
+
+  renderMessageInput() {
+    return (
+      <div className="message-box-container">
+        <div className="message-box">
+          <Input.TextArea
+            value={this.state.message}
+            placeholder={
+              this.props.participants.length > 2 ? 
+                'Message this group' :
+                `Message ${this.props.participants.find(p => p.username !== this.props.currentUser.getUsername())!.username}`
+            }
+            autosize={{ maxRows: 6 }}
+            onChange={(e:  React.FormEvent<HTMLTextAreaElement>) => this.setState({ message: e.currentTarget.value })}
+          />
+          <Icon
+            type="up-circle"
+            theme="outlined"
+            className={`send-message-button ${this.state.message.length === 0 ? 'cannot-send' : ''}`}
+            onClick={this.sendMessage}
+          />
+        </div>
+      </div>
+    );
   }
 
   render() {
@@ -41,7 +75,7 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
             );
           })}
         </div>
-        <div className="message-box">{this.state.message}</div>
+        {this.renderMessageInput()}
       </div>
     );
   }
