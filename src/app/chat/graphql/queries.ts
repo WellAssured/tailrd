@@ -3,27 +3,27 @@ export interface IGetUserQueryResult {
   username: string;
   isDietitian: string;
   conversations: {
-    items: [{
+    items: Array<{
       conversationId: string;
       info: {
         createdBy: string;
         createdTime: string;
         lastActiveTime: string;
         lastMessageSummary: string;
-        participants: {
+        participants: Array<{
           cognitoId: string;
           username: string;
-        };
+        }>;
       };
       messages: {
-        items: [{
+        items: Array<{
           sender: string;
           timestamp: string;
           content: string;
-        }];
+        }>;
         nextToken: string;
       };
-    }];
+    }>;
     nextToken: string;
   };
 }

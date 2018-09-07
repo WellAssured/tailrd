@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-import { Auth } from 'aws-amplify';
+import { Auth, graphqlOperation } from 'aws-amplify';
+import { Connect } from 'aws-amplify-react';
 import { Login, Register } from '../../auth';
 import Navbar from '../../navbar';
 import VanitySite from '../../vanity';
 import Chat from '../../chat';
+import queries from '../../chat/graphql/queries';
+import mutations from '../../chat/graphql/mutations';
+
 import './TailrdApp.css';
 
 interface IState {
@@ -41,8 +45,13 @@ class TailrdApp extends React.Component<IProps, IState> {
             <Route
               path="/chat"
               render={p =>
-                this.state.authenticated ? 
-                <Chat /> :
+                this.state.authenticated ?
+                <Connect
+                  query={graphqlOperation(queries.getUser)}
+                  mutation={graphqlOperation(mutations.send)}
+                >
+                  {(data: any) => <Chat loading={data.loading} userData={data.data.getUser} sendMessage={data.mutation}/>}
+                </Connect> :
                 <Redirect
                   to={{
                     pathname: '/signin',

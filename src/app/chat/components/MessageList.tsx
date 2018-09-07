@@ -1,17 +1,19 @@
 import * as React from 'react';
 import { Input, Icon } from 'antd';
+import { Element, scroller } from 'react-scroll';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 import Message, { IMessage } from './Message';
 
 interface IMessageListProps {
-  handleNewMessage: (content: string) => void;
-  messages: IMessage[];
+  handleNewMessage: ({}: {convoId: string, content: string}) => void;
+  messages: Array<IMessage>;
+  activeConversationId: string;
   currentUser: CognitoUser;
-  participants: {
+  participants: Array<{
     cognitoId: string;
     username: string;
-  }[];
+  }>;
 }
 interface IMessageListState {
   message: string;
@@ -21,15 +23,24 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
   constructor(props: IMessageListProps) {
     super(props);
     this.state = {
-      message: '',
+      message: ''
     };
+  }
+
+  componentDidMount() {
+    scroller.scrollTo('bottom', {containerId: 'messageList'});
+  }
+  componentDidUpdate(prevProps: IMessageListProps) {
+    if (this.props.messages.length !== prevProps.messages.length) {
+      scroller.scrollTo('bottom', {containerId: 'messageList'});
+    }
   }
 
   sendMessage = () => {
     if (this.state.message.length > 0) {
       const content = this.state.message;
       this.setState({ message: '' });
-      this.props.handleNewMessage(content);
+      this.props.handleNewMessage({convoId: this.props.activeConversationId, content: content});
     }
   }
 
@@ -61,8 +72,8 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
   render() {
     return (
       <div className="messageList-messageBox">
-        <div className="chat-list messageList">
-          {this.props.messages.map((c, i) => {
+        <div className="chat-list messageList" id="messageList">
+          {[...this.props.messages].reverse().map((c, i) => {
             const pSender = this.props.participants.find(p => p.cognitoId === c.sender);
             const sender = pSender === undefined ? 'Unknown' : pSender.username;
             return (
@@ -74,6 +85,7 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
               </div>
             );
           })}
+          <Element name="bottom" />
         </div>
         {this.renderMessageInput()}
       </div>

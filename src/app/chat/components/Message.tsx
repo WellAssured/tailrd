@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 export interface IMessage {
+  conversationId?: string;
   sender: string;
   timestamp: string;
   content: string;

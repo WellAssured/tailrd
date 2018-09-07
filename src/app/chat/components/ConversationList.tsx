@@ -3,7 +3,7 @@ import * as React from 'react';
 import Conversation, { IConversation } from './Conversation';
 
 interface IConversationListProps {
-  conversations: IConversation[];
+  conversations: Array<IConversation>;
 }
 interface IConversationListState {}
 

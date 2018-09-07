@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export interface IConversation {
-  participants: [string];
+  participants: Array<string>;
   lastActiveTime: string;
   lastMessageSummary: string;
 }

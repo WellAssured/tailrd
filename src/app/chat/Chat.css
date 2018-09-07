@@ -89,6 +89,15 @@
   border-radius: 10px;
 }
 
+@media (min-width: ) {
+  .message-header {
+    font-size: 16px;
+  }
+  .message-content {
+    font-size: 12px;
+  }
+}
+
 .message-float-left > .message > .message-content {
   margin-right: auto;
   background-color: #A78F5C;

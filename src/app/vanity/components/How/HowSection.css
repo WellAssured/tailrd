@@ -37,7 +37,7 @@
   flex-direction: column;
   justify-content: space-between;
   color: #023744;
-  padding: 1em;
+  padding: 25px;
 }
 .how-block:hover {
   transform: translate(0px, -2px);
