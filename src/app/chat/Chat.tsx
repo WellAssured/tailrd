@@ -4,7 +4,7 @@ import { CognitoUser } from 'amazon-cognito-identity-js';
 import * as Observable from 'zen-observable';
 import { Row, Col } from 'antd';
 
-import { IGetUserQueryResult } from './graphql/queries';
+import * as GQLTypes from './graphql/gql_types';
 import subscriptions from './graphql/subscriptions';
 import ConversationList from './components/ConversationList';
 import MessageList from './components/MessageList';
@@ -15,53 +15,63 @@ import './Chat.css';
 interface IChatProps {
   loading: any;
   sendMessage: (message: {convoId: string, content: string}) => void;
-  userData: IGetUserQueryResult;
+  userData: GQLTypes.IGetUserQueryResult;
 }
 interface IChatState {
+  loading: boolean;
   user?: CognitoUser;
   activeConversation: number;
-  newMessages: Array<IMessage>;
+  conversations: Array<GQLTypes.IConversationItem>;
 }
 
 class Chat extends React.Component<IChatProps, IChatState> {
   constructor(props: IChatProps) {
     super(props);
-    this.state = { user: undefined, activeConversation: 0, newMessages: [] };
+    this.state = { loading: true, user: undefined, activeConversation: 0, conversations: [] };
     Auth.currentAuthenticatedUser().then(u => this.setState({ user: u }));
   }
 
   componentDidUpdate(prevProps: IChatProps) {
     if (this.props.userData !== undefined && prevProps.userData === undefined && this.props.userData.conversations.items.length > 0) {
-      // if (this.props.userData.isDietitian) {
-      //   (API.graphql(graphqlOperation(subscriptions.newMessage)) as Observable<any>).subscribe(({ value }) => this.handleNewMessage(value.data));
-      // } else {
-      (API.graphql(graphqlOperation(subscriptions.newMessage, { convoId: this.props.userData.conversations.items[0].conversationId })) as Observable<any>).subscribe(({ value }) => this.handleNewMessage(value.data));
-      // }
+      // Done Loading!
+      this.setState({ loading: false, conversations: this.props.userData.conversations.items }, () =>
+        // After putting the conversations in our state, we need to subscribe to all of our conversations
+        this.state.conversations.forEach((convo: GQLTypes.IConversationItem) =>
+          (API.graphql(graphqlOperation(
+            subscriptions.newMessage,
+            { convoId: convo.conversationId }
+          )) as Observable<any>).subscribe(({ value }) => this.handleNewMessage(convo.conversationId, value.data))
+        )
+      );
     }
   }
 
-  handleNewMessage = (data: { newMessage: IMessage}) => {
-    const newMessages = this.state.newMessages;
-    newMessages.unshift(data.newMessage);
-    this.setState({ newMessages });
+  handleConvoClick = (convoId: string) => {
+    this.setState({ activeConversation: this.state.conversations.findIndex(c => c.conversationId === convoId) });
   }
 
-  unpackConversations = (data: IGetUserQueryResult) => {
-    return data.conversations.items.map((convo: IGetUserQueryResult['conversations']['items'][0]) => ({
-      participants: convo.info.participants.filter(
-        (p: IGetUserQueryResult['conversations']['items'][0]['info']['participants'][0]) => p.username !== this.state.user!.getUsername()
-      ).map((p: IGetUserQueryResult['conversations']['items'][0]['info']['participants'][0]) => p.username),
-      lastActiveTime: convo.info.lastActiveTime,
-      lastMessageSummary: convo.info.lastMessageSummary
-    }));
-  }
-
-  unpackMessages = (data: IGetUserQueryResult) => {
-    return [...this.state.newMessages, ...data.conversations.items[this.state.activeConversation].messages.items];
+  handleNewMessage = (convoId: string, data: { newMessage: IMessage}) => {
+    const convoIndex = this.state.conversations.findIndex(c => c.conversationId === convoId);
+    if (convoIndex !== -1) {
+      const conversation = this.state.conversations[convoIndex];
+      // add the new message to the conversation
+      conversation.messages.items.unshift(data.newMessage);
+      const currentConvos = this.state.conversations;
+      currentConvos[convoIndex] = conversation;
+      // replace the old conversation with the updated one
+      this.setState({ conversations: currentConvos });
+    }
   }
 
   renderConvoList() {
-    return (<ConversationList conversations={this.unpackConversations(this.props.userData)}/>);
+    return (
+      <ConversationList
+        currentUser={this.state.user!}
+        activeConversationId={this.state.conversations[this.state.activeConversation].conversationId}
+        conversations={this.state.conversations}
+        onConvoClick={this.handleConvoClick}
+      />
+    );
   }
 
   renderMessageList() {
@@ -69,10 +79,10 @@ class Chat extends React.Component<IChatProps, IChatState> {
       return (
         <MessageList
           handleNewMessage={this.props.sendMessage}
-          activeConversationId={this.props.userData.conversations.items[this.state.activeConversation].conversationId}
-          messages={this.unpackMessages(this.props.userData)}
+          activeConversationId={this.state.conversations[this.state.activeConversation].conversationId}
+          messages={this.state.conversations[this.state.activeConversation].messages.items}
           currentUser={this.state.user!}
-          participants={this.props.userData.conversations.items[this.state.activeConversation].info.participants}
+          participants={this.state.conversations[this.state.activeConversation].info.participants}
         />
       );
     } else {
@@ -81,7 +91,7 @@ class Chat extends React.Component<IChatProps, IChatState> {
   }
 
   renderChatApp = () => {
-    if (this.props.loading || this.props.userData === undefined) {
+    if (this.state.loading) {
       return (<div className="chat-app">Loading...</div>);
     }
     return (

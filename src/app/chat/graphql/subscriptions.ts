@@ -1,6 +1,6 @@
 export default {
   newMessage: `
-    subscription newMessages($convoId: ID) {
+    subscription newMessages($convoId: ID!) {
       newMessage(conversationId: $convoId) {
         conversationId
         sender

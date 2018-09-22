@@ -29,10 +29,14 @@
 }
 
 .conversation {
+  margin: 5px;
+  cursor: pointer;
+}
+
+.conversation-active {
   border: 2px solid #A78F5C;
   border-radius: 5px;
-  cursor: pointer;
-  margin: 5px;
+  cursor: default;
 }
 
 .conversation-participants {
