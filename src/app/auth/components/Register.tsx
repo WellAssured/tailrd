@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Modal, Button, Form, Input, Icon, Card } from 'antd';
 import { Auth } from 'aws-amplify';
 import { NavLink, Redirect } from 'react-router-dom';
+import { Elements, StripeProvider } from 'react-stripe-elements';
+
+import StripeCheckoutForm from './StripeCheckoutForm';
 
 import '../Auth.css';
 
@@ -13,6 +16,7 @@ interface IRegisterProps {
 interface IRegisterState {
   registered: boolean;
   confirmed: boolean;
+  paid: boolean;
   isLoading: boolean;
   attemptedSubmit: boolean;
   username: string;
@@ -126,6 +130,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     this.state = {
       registered: false,
       confirmed: false,
+      paid: false,
       isLoading: false,
       attemptedSubmit: false,
       username: '',
@@ -217,20 +222,34 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     }
   }
   
-  renderHeader = () => (
+  renderHeader = (headerText: string) => (
     <div className="auth-form-header">
-      <div className="form-greeting">Why, hello there!</div>
+      <div className="form-greeting">{headerText}</div>
+    </div>
+  )
+
+  renderPaymentForm = () => (
+    <div className="auth-form">
+      <div className="signup-modal-title">
+        Connect with your <span style={{ fontWeight: 500, color: '#A78F5C' }}>personal</span> Registered Dietitian.<br/>
+        Subscribe for just <span style={{ fontWeight: 500, color: '#A78F5C' }}>$30</span> per month.<br/>Cancel anytime.
+        <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
+      </div>
+      <StripeProvider apiKey="pk_test_pH3IH8yggawrqA1ugA7S4AY0">
+          <Elements>
+            <StripeCheckoutForm username={this.state.username || 'Nemo'}/>
+          </Elements>
+      </StripeProvider>
     </div>
   )
 
   renderConfirmationForm = () => (
     <div className="auth-form">
-    <div className="signup-modal-title">
-      Alright! Your account has been created!<br/>
-      We sent you a <span style={{ color: '#A78F5C' }}>Confirmation Code</span> (may take a couple minutes). <br/>
-      Check your email and enter the <span style={{ color: '#A78F5C' }}>Code</span> here.
-      <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
-    </div>
+      <div className="signup-modal-title">
+        We sent you a <span style={{ color: '#A78F5C' }}>Confirmation Code</span> (may take a couple minutes). <br/>
+        Check your email and enter the <span style={{ color: '#A78F5C' }}>Code</span> here.
+        <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
+      </div>
       <Form layout="horizontal" onSubmit={this.handleConfirm}>
         {confirmationFormFields.map(field => (
           <Form.Item
@@ -266,7 +285,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
   renderRegisterForm = () => (
     <div className="auth-form">
     <div className="signup-modal-title">
-      Welcome to the <span style={{ color: '#A78F5C' }}>tailRD Private Beta</span>!<br/>
+      Welcome to <span style={{ color: '#A78F5C' }}>tailRD Nutrition</span>!<br/>
       Let's get your new account set up.
       <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
     </div>
@@ -306,15 +325,26 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
   )
 
   render() {
-    if (this.state.confirmed) {
+    if (this.state.paid) {
       return <Redirect to="/signin"/>;
     }
-    let rendered = this.state.registered ? this.renderConfirmationForm() : this.renderRegisterForm();
+    let rendered;
+    let header = '';
+    if (this.state.confirmed) {
+      rendered = this.renderPaymentForm();
+      header = 'Ok, here\'s the last step.';
+    } else if (this.state.registered) {
+      rendered = this.renderConfirmationForm();
+      header = 'Alright! Your account has been created!';
+    } else {
+      rendered = this.renderRegisterForm();
+      header = 'Why, hello there!';
+    }
     if (this.props.inModal) {
       rendered = (
         <Modal
           className="signup-modal"
-          title={this.renderHeader()}
+          title={this.renderHeader(header)}
           visible={this.props.visible}
           onCancel={this.props.onClose}
           footer={null}
@@ -325,7 +355,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     } else {
       rendered = (
         <div className="auth-container">
-          <Card className="auth-card register-card" title={this.renderHeader()} bordered={false}>
+          <Card className="auth-card register-card" title={this.renderHeader(header)} bordered={false}>
             {rendered}
           </Card>
         </div>

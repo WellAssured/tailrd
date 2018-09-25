@@ -43,6 +43,7 @@
 
 .auth-form-header {
   display: flex;
+  width: 100%;
   justify-content: space-between;
   align-items: baseline;
 }
@@ -110,4 +111,34 @@
 .form-error-message {
   text-align: center;
   color: #f5222d;
+}
+
+.card-info {
+  display: flex;
+  flex: 1 1 auto;
+  min-height: 50px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.card-input {
+  padding: 4px 0;
+  line-height: 21px;
+  border-bottom: 2px solid #A78F5C;
+  margin-bottom: 15px;
+}
+
+.card-input-number {
+  width: 100%;
+}
+
+.card-input-exp {
+  width: 25%;
+}
+.card-input-cvc {
+  width: 25%;
+}
+
+.half-width {
+  width: 50%;
 }
