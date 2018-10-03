@@ -196,7 +196,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             attributes: {
               email: this.state.email,
               // phone_number: this.state.phone,
-              'custom:Zip': this.state.zip
+              'custom:zip': this.state.zip
             }
           }).then(data => {
             this.setState({ registered: true, isLoading: false });
