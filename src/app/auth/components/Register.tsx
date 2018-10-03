@@ -12,6 +12,7 @@ interface IRegisterProps {
   inModal: boolean;
   visible?: boolean;
   onClose?: () => void;
+  onRegisterSuccess: () => void;
 }
 interface IRegisterState {
   registered: boolean;
@@ -221,6 +222,12 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
       });
     }
   }
+
+  handlePaymentSuccess = () =>
+    Auth.signIn(this.state.username, this.state.password).then(() => {
+      this.setState({ paid: true });
+      this.props.onRegisterSuccess();
+    })
   
   renderHeader = (headerText: string) => (
     <div className="auth-form-header">
@@ -232,12 +239,16 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     <div className="auth-form">
       <div className="signup-modal-title">
         Connect with your <span style={{ fontWeight: 500, color: '#A78F5C' }}>personal</span> Registered Dietitian.<br/>
-        Subscribe for just <span style={{ fontWeight: 500, color: '#A78F5C' }}>$30</span> per month.<br/>Cancel anytime.
+        Ask 15 meaningful questions for just <span style={{ fontWeight: 500, color: '#A78F5C' }}>$10</span>.
         <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
       </div>
-      <StripeProvider apiKey="pk_test_pH3IH8yggawrqA1ugA7S4AY0">
+      <StripeProvider apiKey="pk_live_nyU4JjYtdyGidg7DGyXVYoxo"> {/* "pk_test_pH3IH8yggawrqA1ugA7S4AY0"> */}
           <Elements>
-            <StripeCheckoutForm username={this.state.username || 'Nemo'}/>
+            <StripeCheckoutForm
+              username={this.state.username || 'Nemo'}
+              email={this.state.email || 'jwhite5672@gmail.com'}
+              onPaymentSuccess={this.handlePaymentSuccess}
+            />
           </Elements>
       </StripeProvider>
     </div>
@@ -326,7 +337,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
 
   render() {
     if (this.state.paid) {
-      return <Redirect to="/signin"/>;
+      return <Redirect to="/chat"/>;
     }
     let rendered;
     let header = '';

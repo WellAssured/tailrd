@@ -20,6 +20,7 @@ const QUESTION_BANK = [
 
 interface IProps {
   authenticated: boolean;
+  onRegisterSuccess: () => void;
 }
 
 interface IState {
@@ -77,6 +78,7 @@ class ContentContainer extends React.Component<IProps, IState> {
           visible={this.state.showSignupModal}
           onClose={this.handleSignupClose}
           inModal={true}
+          onRegisterSuccess={this.props.onRegisterSuccess}
         />
       </div>          
     );

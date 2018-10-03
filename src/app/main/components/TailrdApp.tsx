@@ -27,12 +27,9 @@ class TailrdApp extends React.Component<IProps, IState> {
       this.setState({ authenticated: true })
     ).catch(() => { /* Not authenticated */});
   }
-  onLogin() {
-    this.setState({ authenticated: true });
-  }
-  logout() {
-    Auth.signOut().then(() => this.setState({ authenticated: false }));
-  }
+
+  onLogin = () => this.setState({ authenticated: true });
+  logout = () => Auth.signOut().then(() => this.setState({ authenticated: false }));
 
   render() {
     return (
@@ -41,7 +38,7 @@ class TailrdApp extends React.Component<IProps, IState> {
         <div className="tailRD-app">
           <Navbar isSignedIn={this.state.authenticated} onSignOut={() => this.logout()} />
           <Switch>
-            <Route exact={true} path="/" render={() => <VanitySite authenticated={this.state.authenticated} />} />
+            <Route exact={true} path="/" render={() => <VanitySite authenticated={this.state.authenticated} onRegisterSuccess={this.onLogin} />} />
             <Route
               path="/chat"
               render={p =>
@@ -73,7 +70,7 @@ class TailrdApp extends React.Component<IProps, IState> {
               render={props => 
                 this.state.authenticated ?
                 <Redirect to="/chat" /> :
-                <Register inModal={false} {...props} />
+                <Register inModal={false} {...props} onRegisterSuccess={this.onLogin} />
               }
             />
             <Redirect to="/" />

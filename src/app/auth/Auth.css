@@ -119,6 +119,7 @@
   min-height: 50px;
   flex-direction: row;
   justify-content: space-between;
+  margin-bottom: 25px;
 }
 
 .card-input {
