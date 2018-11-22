@@ -33,6 +33,7 @@ const HeroSection = (props: IProps) => (
     >
       Get <span className="action-button-brand">tailRD</span>
     </Button>
+    <span className="pricing-text">for just $10</span>
   </div>
 );
 

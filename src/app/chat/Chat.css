@@ -63,6 +63,8 @@
 
 .messageList {
   flex: 1 1 auto;
+  padding: 10px;
+  border-top: 1px solid;
 }
 
 .messageBox {
@@ -87,10 +89,11 @@
   background-color: #7C9397;
   font-family: 'Lato';
   font-size: 16px;
-  font-weight: 300;
+  font-weight: 400;
   color: #E1E6E1;
   padding: 10px;
   border-radius: 10px;
+  max-width: 550px;
 }
 
 @media (min-width: ) {

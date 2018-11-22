@@ -29,6 +29,7 @@ const checkoutStyle = {
 interface ICheckoutFormProps extends ReactStripeElements.InjectedStripeProps {
   username: string;
   email: string;
+  chargeAmount: { code: string; label: string; amount: number; description: string };
   onPaymentSuccess: () => void;
 }
 
@@ -63,9 +64,9 @@ class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormStat
           token: { source: stripeToken.token!.id },
           customer: { email: this.props.email },
           charge: {
-            metadata: {sales_phase: 1},
+            metadata: { sales_phase: 1, promocode: this.props.chargeAmount.code },
             receipt_email: this.props.email,
-            amount: 1000,
+            amount: this.props.chargeAmount.amount,
             currency: 'usd',
             description: '15 tailRD Questions',
             statement_descriptor: '15 tailRD Questions'
@@ -92,10 +93,19 @@ class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormStat
     return (
       <div className="checkout">
         {this.state.formError.hasError && <div className="form-error-message">{this.state.formError.message}</div>}
-        <label className="card-input-number">Card Number<CardNumberElement className="card-input card-input-number" style={checkoutStyle} /></label>
+        <label className="card-input-number">
+          Card Number
+          <CardNumberElement className="card-input card-input-number" style={checkoutStyle} />
+        </label>
         <div className="card-info">
-          <label className="card-input-exp">Expiration<CardExpiryElement className="card-input" style={checkoutStyle} /></label>
-          <label className="card-input-cvc">CVC<CardCVCElement placeholder="000" className="card-input" style={checkoutStyle} /></label>
+          <label className="card-input-exp">
+            Expiration
+            <CardExpiryElement className="card-input" style={checkoutStyle} />
+          </label>
+          <label className="card-input-cvc">
+            CVC
+            <CardCVCElement placeholder="000" className="card-input" style={checkoutStyle} />
+          </label>
         </div>
         {/* <label>Zip Code<PostalCodeElement style={checkoutStyle} /></label> */}
         <div className="form-submit">
@@ -103,7 +113,9 @@ class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormStat
             <Button className="submit-button" loading={true} /> :
             this.state.paymentSuccess ?
               <Button className="submit-button" icon="check" /> :
-              <Button className="submit-button" onClick={this.submitPaymentRequest}>Pay $10</Button>
+              <Button className="submit-button" onClick={this.submitPaymentRequest}>
+                {`Pay ${this.props.chargeAmount.label}`}
+              </Button>
           }
         </div>
         {/* <PaymentRequestButtonElement /> */}

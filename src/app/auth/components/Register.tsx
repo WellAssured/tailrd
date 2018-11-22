@@ -17,6 +17,7 @@ interface IRegisterProps {
 interface IRegisterState {
   registered: boolean;
   confirmed: boolean;
+  promo: string;
   paid: boolean;
   isLoading: boolean;
   attemptedSubmit: boolean;
@@ -97,6 +98,10 @@ const registerFormFields = [
       }
       return { error: false };
     }
+  },
+  {
+    'key': 'field-6', 'name': 'promo', 'label': 'Promo', 'icon': 'gift',
+    'type': 'text', 'placeholder': 'In the know?',
   }
 ];
 
@@ -125,12 +130,18 @@ const confirmationFormFields = [
   }
 ];
 
+const chargeAmounts = {
+  regular: { promo: 'regular', label: '$10', amount: 1000, description: '' },
+  plant64: { promo: 'plant64', label: '$5', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' }
+};
+
 class Register extends React.Component<IRegisterProps, IRegisterState> {
   constructor(props: IRegisterProps) {
     super(props);
     this.state = {
       registered: false,
       confirmed: false,
+      promo: '',
       paid: false,
       isLoading: false,
       attemptedSubmit: false,
@@ -164,6 +175,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     // If inputName is defined, only validate the specified target
     const fieldsToValidate = fieldName ? formFields.filter(field => field.name === fieldName) : formFields;
     fieldsToValidate.forEach(field => {
+      if (!field.validate) { return; }
       const validation = field.validate(this.state[field.name]);
       if (validation.error) {
         formValid = false;
@@ -235,18 +247,43 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     </div>
   )
 
+  getChargeAmount = () => {
+    const promo = (this.state.promo && (this.state.promo in chargeAmounts)) ? this.state.promo : 'regular';
+    return chargeAmounts[promo];
+  }
+
+  renderChargeText = () => {
+    const chargeAmount = this.getChargeAmount();
+    if (chargeAmount.promo !== 'regular') {
+      return (
+        <span>
+          <span style={{ textDecoration: 'line-through' }}>
+            {chargeAmounts.regular.label}
+          </span>
+          <span style={{ fontWeight: 500, color: '#A78F5C' }}>
+            {` ${chargeAmount.label}`}
+            <br/>
+            {chargeAmount.description}
+          </span>
+        </span>
+      );
+    }
+    return (<span><span style={{ fontWeight: 500, color: '#A78F5C' }}>{chargeAmount.label}</span>.</span>);
+  }
+  /* "pk_test_pH3IH8yggawrqA1ugA7S4AY0" pk_live_nyU4JjYtdyGidg7DGyXVYoxo */
   renderPaymentForm = () => (
     <div className="auth-form">
       <div className="signup-modal-title">
         Connect with your <span style={{ fontWeight: 500, color: '#A78F5C' }}>personal</span> Registered Dietitian.<br/>
-        Ask 15 meaningful questions for just <span style={{ fontWeight: 500, color: '#A78F5C' }}>$10</span>.
+        Ask 15 meaningful questions for just {this.renderChargeText()}
         <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
       </div>
-      <StripeProvider apiKey="pk_live_nyU4JjYtdyGidg7DGyXVYoxo"> {/* "pk_test_pH3IH8yggawrqA1ugA7S4AY0"> */}
+      <StripeProvider apiKey="pk_test_pH3IH8yggawrqA1ugA7S4AY0"> 
           <Elements>
             <StripeCheckoutForm
               username={this.state.username || 'Nemo'}
               email={this.state.email || 'jwhite5672@gmail.com'}
+              chargeAmount={this.getChargeAmount()}
               onPaymentSuccess={this.handlePaymentSuccess}
             />
           </Elements>
@@ -276,7 +313,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
               name={field.name}
               value={this.state[field.name]}
               onChange={this.handleChange}
-              onPressEnter={this.handleSubmit}
+              onPressEnter={this.handleConfirm}
               prefix={<Icon type={field.icon} style={{ color: 'rgba(0,0,0,.25)' }} />} 
               placeholder={field.placeholder}
               autoComplete={field.autoComplete}

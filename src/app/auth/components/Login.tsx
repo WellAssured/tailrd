@@ -146,6 +146,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
   }
   handleConfirm = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
+    if (this.state.isLoading) { return; }
     if (this.validateForm(undefined, 'Confirmation')) {
       this.setState({ isLoading: true }, () => {
         Auth.confirmSignUp(this.state.username, this.state.confirmationCode)
@@ -191,7 +192,7 @@ class Login extends React.Component<ILoginProps, ILoginState> {
               name={field.name}
               value={this.state[field.name]}
               onChange={this.handleChange}
-              onPressEnter={this.handleSubmit}
+              onPressEnter={this.handleConfirm}
               prefix={<Icon type={field.icon} style={{ color: 'rgba(0,0,0,.25)' }} />} 
               placeholder={field.placeholder}
               autoComplete={field.autoComplete}

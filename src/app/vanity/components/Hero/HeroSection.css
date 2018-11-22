@@ -59,7 +59,7 @@
   border: 2px solid #023744;
   box-shadow: 2px 5px 2px #99ABAD;
   font-size: 1em;
-  font-weight: 200;
+  font-weight: 300;
   font-family: 'Lato';
 }
 .hero-section .action-button:hover, .hero-section .action-button:focus {
@@ -78,4 +78,9 @@
   font-family: 'Playfair-Display';
   font-style: italic;
   font-size: 1.2em;
+}
+
+.pricing-text {
+  color: #023744;
+  font-size: 0.8em;
 }

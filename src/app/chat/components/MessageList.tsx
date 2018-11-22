@@ -44,6 +44,17 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
     }
   }
 
+  handleInputKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !(e.altKey || e.ctrlKey)) {  // https://www.w3.org/TR/uievents-key/#keys-whitespace
+      e.preventDefault();
+      this.sendMessage();
+    }
+  }
+
+  handleInputChange = (e: React.FormEvent<HTMLTextAreaElement>) => {
+    this.setState({ message: e.currentTarget.value });
+  }
+
   renderMessageInput() {
     return (
       <div className="message-box-container">
@@ -55,8 +66,11 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
                 'Message this group' :
                 `Message ${this.props.participants.find(p => p.username !== this.props.currentUser.getUsername())!.username}`
             }
+            style={{textAlign: 'right'}}
             autosize={{ maxRows: 6 }}
-            onChange={(e:  React.FormEvent<HTMLTextAreaElement>) => this.setState({ message: e.currentTarget.value })}
+            onChange={this.handleInputChange}
+            onKeyDown={this.handleInputKeyDown}
+            autoFocus={true}
           />
           <Icon
             type="up-circle"
@@ -72,6 +86,7 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
   render() {
     return (
       <div className="messageList-messageBox">
+        <div className="messageList-title">Chat with {this.props.participants.find(p => p.username !== this.props.currentUser.getUsername())!.username}</div>
         <div className="chat-list messageList" id="messageList">
           {[...this.props.messages].reverse().map((c, i) => {
             const pSender = this.props.participants.find(p => p.cognitoId === c.sender);

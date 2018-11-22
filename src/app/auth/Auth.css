@@ -62,7 +62,7 @@
   border: 1px solid #E1E6E1;
   box-shadow: 2px 2px 2px #9A8458;
   font-size: 20px;
-  font-weight: 200;
+  font-weight: 300;
   color: #E1E6E1;
 }
 
@@ -86,7 +86,7 @@
 }
 .form-nav-link {
   font-size: 16px;
-  font-weight: 200;
+  font-weight: 300;
   color: #E1E6E1;
 }
 .form-nav-link:hover {

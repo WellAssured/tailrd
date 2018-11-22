@@ -18,7 +18,11 @@ const Conversation = (props: IConversationProps) => (
   >
     <div className="conversation-participants">
        {/* Only show participants that are not the current user */}
-      {props.conversation.info.participants.filter(p => (p.username !== props.currentUser.getUsername())).map(p => p.username)}
+      {
+        props.conversation.info.participants ? 
+        props.conversation.info.participants.filter(p => (p.username !== props.currentUser.getUsername())).map(p => p.username)
+        : ''
+      }
     </div>
     {/* <div className="conversation-lastActiveTime">{
       (new Date(props.conversation.lastActiveTime)).toLocaleString()
