@@ -132,7 +132,8 @@ const confirmationFormFields = [
 
 const chargeAmounts = {
   regular: { promo: 'regular', label: '$10', amount: 1000, description: '' },
-  plant64: { promo: 'plant64', label: '$5', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' }
+  plant64: { promo: 'plant64', label: '$5', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' },
+  katelyn: { promo: 'katelyn', label: '$0', amount: 0, description: 'Welcome to Katelyn\'s FREE Trial!' }
 };
 
 class Register extends React.Component<IRegisterProps, IRegisterState> {
@@ -208,7 +209,8 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             attributes: {
               email: this.state.email,
               // phone_number: this.state.phone,
-              'custom:zip': this.state.zip
+              'custom:zip': this.state.zip,
+              'custom:promo': this.getCorrectedPromo()
             }
           }).then(data => {
             this.setState({ registered: true, isLoading: false });
@@ -248,8 +250,12 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
   )
 
   getChargeAmount = () => {
-    const promo = (this.state.promo && (this.state.promo in chargeAmounts)) ? this.state.promo : 'regular';
-    return chargeAmounts[promo];
+    return chargeAmounts[this.getCorrectedPromo()];
+  }
+
+  getCorrectedPromo() {
+    const enteredPromo = (this.state.promo || 'regular').trim().toLowerCase();
+    return (enteredPromo in chargeAmounts) ? enteredPromo : 'regular';
   }
 
   renderChargeText = () => {
@@ -278,16 +284,22 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         Ask 15 meaningful questions for just {this.renderChargeText()}
         <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
       </div>
-      <StripeProvider apiKey="pk_test_pH3IH8yggawrqA1ugA7S4AY0"> 
-          <Elements>
-            <StripeCheckoutForm
-              username={this.state.username || 'Nemo'}
-              email={this.state.email || 'jwhite5672@gmail.com'}
-              chargeAmount={this.getChargeAmount()}
-              onPaymentSuccess={this.handlePaymentSuccess}
-            />
-          </Elements>
-      </StripeProvider>
+      { this.getChargeAmount().amount > 0 ?  // Only render payments form if we're charging them
+        <StripeProvider apiKey="pk_live_nyU4JjYtdyGidg7DGyXVYoxo"> 
+            <Elements>
+              <StripeCheckoutForm
+                username={this.state.username || 'Nemo'}
+                email={this.state.email || 'jwhite5672@gmail.com'}
+                chargeAmount={this.getChargeAmount()}
+                onPaymentSuccess={this.handlePaymentSuccess}
+              />
+            </Elements>
+        </StripeProvider>
+        :
+        <div className="form-submit">
+          <Button className="submit-button" onClick={this.handlePaymentSuccess}>Great!</Button>
+        </div>
+      }
     </div>
   )
 
