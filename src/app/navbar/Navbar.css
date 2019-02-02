@@ -12,19 +12,20 @@
   height: 100%;
   margin-left: 1em;
   align-items: center;
+  max-width: 40px;
 }
 
 .brand-image {
   width: auto;
   height: 100%;
 }
-.brand-image:hover {
+/* .brand-image:hover {
   animation: spin 2s cubic-bezier(0.6, -0.28, 0.9, 0.16) infinite both;
 }
 @keyframes spin {
   0% { transform:rotate(0deg); }
   100% { transform:rotate(360deg); }
-}
+} */
 
 .brand-name {
   margin: 0 0.5em;

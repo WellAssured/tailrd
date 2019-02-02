@@ -12,7 +12,7 @@
 .messageList-container {}
 
 .chat-list {
-  overflow: scroll;
+  overflow: auto;
 }
 
 .chat-item {
@@ -96,14 +96,14 @@
   max-width: 550px;
 }
 
-@media (min-width: ) {
+/* @media (max-width: 400px) {
   .message-header {
     font-size: 16px;
   }
   .message-content {
     font-size: 12px;
   }
-}
+} */
 
 .message-float-left > .message > .message-content {
   margin-right: auto;
