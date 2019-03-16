@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { graphqlOperation, Auth, API } from 'aws-amplify';
+import { graphqlOperation, Auth, API /* , Storage */ } from 'aws-amplify';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import * as Observable from 'zen-observable';
 import { Row, Col } from 'antd';
@@ -63,6 +63,13 @@ class Chat extends React.Component<IChatProps, IChatState> {
     }
   }
 
+  // handlePhotoUpload = (photoFile) => {
+  //   return Storage.put(photoFile.name, photoFile.data, {
+  //       level: 'protected',
+  //       contentType: photoFile.type
+  //   });
+  // }
+
   renderConvoList() {
     return (
       <ConversationList
@@ -79,6 +86,7 @@ class Chat extends React.Component<IChatProps, IChatState> {
       return (
         <MessageList
           handleNewMessage={this.props.sendMessage}
+          // handlePhotoUpload={this.handlePhotoUpload}
           activeConversationId={this.state.conversations[this.state.activeConversation].conversationId}
           messages={this.state.conversations[this.state.activeConversation].messages.items}
           currentUser={this.state.user!}

@@ -9,10 +9,10 @@
 
 .navbar-brand-container {
   display: flex;
-  height: 100%;
+  height: 1.5em;
+  max-width: 40px;
   margin-left: 1em;
   align-items: center;
-  max-width: 40px;
 }
 
 .brand-image {
@@ -40,6 +40,7 @@
   }
   .navbar-brand-container {
     margin-left: 10px;
+    height: 1.25em;
   }
   .brand-name {
     font-size: 1em;

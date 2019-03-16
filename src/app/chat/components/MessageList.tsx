@@ -7,6 +7,7 @@ import Message, { IMessage } from './Message';
 
 interface IMessageListProps {
   handleNewMessage: ({}: {convoId: string, content: string}) => void;
+  // handlePhotoUpload: (photo: File) => Promise<{}>;
   messages: Array<IMessage>;
   activeConversationId: string;
   currentUser: CognitoUser;
