@@ -96,7 +96,7 @@
   max-width: 550px;
 }
 
-@media (min-width: ) {
+@media (max-width: 400px) {
   .message-header {
     font-size: 16px;
   }
@@ -137,4 +137,15 @@
 .cannot-send:hover {
   color: #ccc;
   cursor: default;
+}
+
+.photo-input-container {
+  cursor: pointer;
+  color: #9A8458;
+  font-size: 32px;
+  margin-right: 10px;
+  line-height: 31px;
+}
+#photo-input {
+  display: none;
 }

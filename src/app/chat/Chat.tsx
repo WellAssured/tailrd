@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { graphqlOperation, Auth, API } from 'aws-amplify';
+import { graphqlOperation, Auth, API, Storage } from 'aws-amplify';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import * as Observable from 'zen-observable';
 import { Row, Col } from 'antd';
@@ -11,6 +11,8 @@ import MessageList from './components/MessageList';
 import { IMessage } from './components/Message';
 
 import './Chat.css';
+
+import { Photo } from './components/MessageList';
 
 interface IChatProps {
   loading: any;
@@ -63,6 +65,14 @@ class Chat extends React.Component<IChatProps, IChatState> {
     }
   }
 
+  handlePhotoUpload = (photo: Photo) => {
+    return Storage.put(photo.name, photo.data, {
+        level: 'protected',
+        contentType: photo.type,
+        progressCallback: photo.updateProgress
+    });
+  }
+
   renderConvoList() {
     return (
       <ConversationList
@@ -79,6 +89,7 @@ class Chat extends React.Component<IChatProps, IChatState> {
       return (
         <MessageList
           handleNewMessage={this.props.sendMessage}
+          handlePhotoUpload={this.handlePhotoUpload}
           activeConversationId={this.state.conversations[this.state.activeConversation].conversationId}
           messages={this.state.conversations[this.state.activeConversation].messages.items}
           currentUser={this.state.user!}

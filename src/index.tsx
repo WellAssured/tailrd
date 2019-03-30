@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import Amplify from 'aws-amplify';
 import TailrdAppContainer from './app/main/TailrdAppContainer';
-import registerServiceWorker from './registerServiceWorker';
+import { unregister } from './registerServiceWorker';
 
 import amplify_config from './aws_config';
 
@@ -15,4 +15,4 @@ import './index.css';
 
 Amplify.configure(amplify_config);
 ReactDOM.render(<TailrdAppContainer />, document.getElementById('root'));
-registerServiceWorker();
+unregister();
