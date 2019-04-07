@@ -132,8 +132,8 @@ const confirmationFormFields = [
 
 const chargeAmounts = {
   regular: { promo: 'regular', label: '$30', amount: 3000, description: '' },
-  plant64: { promo: 'plant64', label: '$15', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' },
-  katelyn: { promo: 'katelyn', label: '$0', amount: 0, description: 'Welcome to Katelyn\'s FREE Trial!' }
+  plant64: { promo: 'plant64', label: '$15', amount: 1500, description: 'Promo Code plant64 gets you 50% off! Nice!' },
+  katelyn: { promo: 'katelyn', label: '$15', amount: 1500, description: 'Katelyn\'s patients get 50% off! Nice!' }
 };
 
 class Register extends React.Component<IRegisterProps, IRegisterState> {

@@ -160,7 +160,7 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
         <div className="message-box">
           <label className="photo-input-container">
             <Icon type="camera" />
-            <Input hidden={true} id="photo-input" type="file" accept="image/*" capture="environment" onChange={this.handlePhotoChange} value={undefined}/>
+            <Input hidden={true} id="photo-input" type="file" accept="image/*" onChange={this.handlePhotoChange} value={undefined}/>
           </label>
           { this.state.photo.status !== PHOTO_STATUS.NO_PHOTO ? this.renderPhoto() :
             <Input.TextArea
