@@ -15,6 +15,8 @@ import { IMessage } from './components/Message';
 
 import './Chat.css';
 
+import { Photo } from './components/MessageList';
+
 interface IChatProps {
   loading: any;
   userData: GQLTypes.IGetUserQueryResult;
