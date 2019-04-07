@@ -24,14 +24,14 @@ interface IRegisterState {
   username: string;
   password: string;
   email: string;
-  // phone: string;
+  phone: string;
   zip: string;
   confirmationCode: string;
   formFeedback: {
     username: {},
     password: {},
     email: {},
-    // phone: {},
+    phone: {},
     zip: {},
     confirmationCode: {},
   };
@@ -64,17 +64,17 @@ const registerFormFields = [
       return { error: false };
     }
   },
-  // {
-  //   'key': 'field-3', 'name': 'phone', 'label': 'Phone', 'icon': 'phone',
-  //   'type': 'text', 'placeholder': '+1 (336)-123-4567', 'autoComplete': 'tel',
-  //   'validate': (val: string) => {
-  //     const minLength = 8;
-  //     if (val.length < minLength) {
-  //       return { error: true, help: `Your Password must be longer than ${minLength} characters`};
-  //     }
-  //     return { error: false };
-  //   }
-  // },
+  {
+    'key': 'field-3', 'name': 'phone', 'label': 'Phone', 'icon': 'phone',
+    'type': 'text', 'placeholder': '+1 (336)-123-4567', 'autoComplete': 'tel',
+    'validate': (val: string) => {
+      const length = 10;
+      if (val.length !== length) {
+        return { error: true, help: `Your Phone Number must be ${length} characters`};
+      }
+      return { error: false };
+    }
+  },
   {
     'key': 'field-4', 'name': 'email', 'label': 'Email', 'icon': 'mail',
     'type': 'text', 'placeholder': 'We\'ll send your confirmation here', 'autoComplete': 'email',
@@ -131,8 +131,8 @@ const confirmationFormFields = [
 ];
 
 const chargeAmounts = {
-  regular: { promo: 'regular', label: '$10', amount: 1000, description: '' },
-  plant64: { promo: 'plant64', label: '$5', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' },
+  regular: { promo: 'regular', label: '$30', amount: 3000, description: '' },
+  plant64: { promo: 'plant64', label: '$15', amount: 500, description: 'Promo Code plant64 gets you 50% off! Nice!' },
   katelyn: { promo: 'katelyn', label: '$0', amount: 0, description: 'Welcome to Katelyn\'s FREE Trial!' }
 };
 
@@ -148,7 +148,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
       attemptedSubmit: false,
       username: '',
       email: '',
-      // phone: '',
+      phone: '',
       password: '',
       zip: '',
       confirmationCode: '',
@@ -156,7 +156,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         username: {},
         password: {},
         email: {},
-        // phone: {},
+        phone: {},
         zip: {},
         confirmationCode: {},
       },
@@ -208,7 +208,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
             password: this.state.password,
             attributes: {
               email: this.state.email,
-              // phone_number: this.state.phone,
+              phone_number: `+1${this.state.phone}`,
               'custom:zip': this.state.zip,
               'custom:promo': this.getCorrectedPromo()
             }

@@ -31,9 +31,9 @@ const HeroSection = (props: IProps) => (
       ga-event-action="click"
       ga-event-label="Call to Action"
     >
-      Get <span className="action-button-brand">tailRD</span>
+      Get&nbsp;<span className="action-button-brand">tailRD</span>
     </Button>
-    <span className="pricing-text">for just $10</span>
+    <span className="pricing-text">for just $30</span>
   </div>
 );
 
