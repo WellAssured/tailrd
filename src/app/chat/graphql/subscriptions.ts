@@ -3,9 +3,15 @@ export default {
     subscription newMessages($convoId: ID!) {
       newMessage(conversationId: $convoId) {
         conversationId
+        __typename
         sender
         timestamp
-        content
+        ... on TextMessage {
+          content
+        }
+        ... on PhotoMessage {
+          key
+        }
       }
     }
   `,

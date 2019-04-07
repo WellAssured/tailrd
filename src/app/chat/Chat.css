@@ -1,4 +1,5 @@
 .tailRD-app > .chat-app {
+  overflow: auto;
   padding: 20px;
   display: flex;
   flex: 1 1 auto;
@@ -67,11 +68,6 @@
   border-top: 1px solid;
 }
 
-.messageBox {
-  height: 75px;
-  flex: 0;
-}
-
 .message {
   margin-bottom: 15px;
 }
@@ -95,6 +91,10 @@
   border-radius: 10px;
   max-width: 550px;
 }
+.message-content-image {
+  background-color: transparent;
+  image-orientation: from-image;
+}
 
 /* @media (max-width: 400px) {
   .message-header {
@@ -116,7 +116,31 @@
 
 .message-box {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
+}
+.photo-input-display {
+  position: relative;
+  flex: 1 1 200px;
+  text-align: right;
+}
+.photo-input-image {
+  border: 1px solid #A78F5C;
+  border-radius: 10px;
+  padding: 5px;
+}
+.ant-btn.cancel-upload-button {
+  position: absolute;
+  top: -16px;
+  right: -16px;
+}
+
+.photo-input-container {
+  cursor: pointer;
+  color: #9A8458;
+  font-size: 32px;
+  line-height: 32px;
+  height: 32px;
+  margin-right: 10px;
 }
 
 .send-message-button {
@@ -124,7 +148,6 @@
   color: #9A8458;
   font-size: 32px;
   margin-left: 10px;
-  align-self: flex-end;
 }
 
 .send-message-button:hover {

@@ -7,7 +7,6 @@ import Navbar from '../../navbar';
 import VanitySite from '../../vanity';
 import Chat from '../../chat';
 import queries from '../../chat/graphql/queries';
-import mutations from '../../chat/graphql/mutations';
 
 import './TailrdApp.css';
 
@@ -43,11 +42,8 @@ class TailrdApp extends React.Component<IProps, IState> {
               path="/chat"
               render={p =>
                 this.state.authenticated ?
-                <Connect
-                  query={graphqlOperation(queries.getUser)}
-                  mutation={graphqlOperation(mutations.send)}
-                >
-                  {(data: any) => <Chat loading={data.loading} userData={data.data.getUser} sendMessage={data.mutation}/>}
+                <Connect query={graphqlOperation(queries.getUser)}>
+                  {(data: any) => <Chat loading={data.loading} userData={data.data.getUser}/>}
                 </Connect> :
                 <Redirect
                   to={{

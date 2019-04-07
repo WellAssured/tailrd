@@ -21,9 +21,11 @@ export interface IConversationItem {
 }
 
 export interface IMessageItem {
+  __typename: 'TextMessage' | 'PhotoMessage';
   sender: string;
   timestamp: string;
   content: string;
+  key: string;
 }
 
 export interface IGetUserQueryResult {

@@ -1,24 +1,28 @@
 import * as React from 'react';
+import Axios from 'axios';
 import { graphqlOperation, Auth, API /* , Storage */ } from 'aws-amplify';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 import * as Observable from 'zen-observable';
 import { Row, Col } from 'antd';
 
+import { GraphQLResult } from '@aws-amplify/api/lib/types';
 import * as GQLTypes from './graphql/gql_types';
+import mutations from './graphql/mutations';
 import subscriptions from './graphql/subscriptions';
 import ConversationList from './components/ConversationList';
-import MessageList from './components/MessageList';
+import MessageList, { IPhoto } from './components/MessageList';
 import { IMessage } from './components/Message';
 
 import './Chat.css';
 
 interface IChatProps {
   loading: any;
-  sendMessage: (message: {convoId: string, content: string}) => void;
   userData: GQLTypes.IGetUserQueryResult;
 }
 interface IChatState {
   loading: boolean;
+  sendTextMessage: (message: {convoId: string, content: string}) => Promise<GraphQLResult> | Observable<object>;
+  sendPhotoMessage: (message: {convoId: string, key: string}) => Promise<GraphQLResult> | Observable<object>;
   user?: CognitoUser;
   activeConversation: number;
   conversations: Array<GQLTypes.IConversationItem>;
@@ -27,7 +31,15 @@ interface IChatState {
 class Chat extends React.Component<IChatProps, IChatState> {
   constructor(props: IChatProps) {
     super(props);
-    this.state = { loading: true, user: undefined, activeConversation: 0, conversations: [] };
+    this.state = {
+      loading: true,
+      sendTextMessage: (message: {convoId: string, content: string}) => API.graphql(graphqlOperation(mutations.sendText, message)),
+      sendPhotoMessage: (message: {convoId: string, key: string}) => API.graphql(graphqlOperation(mutations.sendPhoto, message)),
+      user: undefined,
+      activeConversation: 0,
+      conversations: []
+    };
+
     Auth.currentAuthenticatedUser().then(u => this.setState({ user: u }));
   }
 
@@ -63,12 +75,26 @@ class Chat extends React.Component<IChatProps, IChatState> {
     }
   }
 
-  // handlePhotoUpload = (photoFile) => {
-  //   return Storage.put(photoFile.name, photoFile.data, {
-  //       level: 'protected',
-  //       contentType: photoFile.type
-  //   });
-  // }
+  handlePhotoUpload = async (convoId: string, photo: IPhoto) => {
+    // first get the signed post url
+    const response = await Axios.post(
+      'https://api.tailrdnutrition.com/lambda/photo-upload',
+      { conversationId: convoId, ext: photo.type }
+    );
+
+    if (response.status === 200) {
+      // upload the photo using the response
+      const uploadData = new FormData();
+      Object.keys(response.data.fields).forEach((key) => {
+        uploadData.append(key, response.data.fields[key]);
+      });
+      const imageBlob = new Blob([photo.data], { type: 'image/png' });
+      uploadData.append('file', imageBlob);
+      return Axios.post(response.data.url, uploadData);
+    } else {
+      return Promise.reject();
+    }
+  }
 
   renderConvoList() {
     return (
@@ -85,8 +111,9 @@ class Chat extends React.Component<IChatProps, IChatState> {
     if (this.props.userData.conversations.items.length > 0) {
       return (
         <MessageList
-          handleNewMessage={this.props.sendMessage}
-          // handlePhotoUpload={this.handlePhotoUpload}
+          handleNewTextMessage={this.state.sendTextMessage}
+          handleNewPhotoMessage={this.state.sendPhotoMessage}
+          handlePhotoUpload={this.handlePhotoUpload}
           activeConversationId={this.state.conversations[this.state.activeConversation].conversationId}
           messages={this.state.conversations[this.state.activeConversation].messages.items}
           currentUser={this.state.user!}

@@ -20,9 +20,15 @@ export default {
             }
             messages {
               items {
+                __typename
                 sender
                 timestamp
-                content
+                ... on TextMessage {
+                  content
+                }
+                ... on PhotoMessage {
+                  key
+                }
               }
               nextToken
             }
