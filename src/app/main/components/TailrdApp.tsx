@@ -2,7 +2,7 @@ import * as React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Auth, graphqlOperation } from 'aws-amplify';
 import { Connect } from 'aws-amplify-react';
-import { Login, Register } from '../../auth';
+import { Login, Register, ForgotPassword } from '../../auth';
 import Navbar from '../../navbar';
 import VanitySite from '../../vanity';
 import Chat from '../../chat';
@@ -67,6 +67,14 @@ class TailrdApp extends React.Component<IProps, IState> {
                 this.state.authenticated ?
                 <Redirect to="/chat" /> :
                 <Register inModal={false} {...props} onRegisterSuccess={this.onLogin} />
+              }
+            />
+            <Route
+              path="/forgot"
+              render={props => 
+                this.state.authenticated ?
+                <Redirect to="/chat" /> :
+                <ForgotPassword onLoginSuccess={() => this.onLogin()} {...props} />
               }
             />
             <Redirect to="/" />

@@ -94,6 +94,12 @@
   color: #A78F5C;
 }
 
+.link-button-text {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
 .signup-modal > .ant-modal-content,
 .signup-modal > .ant-modal-content > .ant-modal-close,
 .signup-modal > .ant-modal-content > .ant-modal-header,

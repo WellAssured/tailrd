@@ -91,7 +91,8 @@
   border-radius: 10px;
   max-width: 550px;
 }
-.message-content-image {
+.message-float-left > .message > .message-content.message-content-image,
+.message-float-right > .message > .message-content.message-content-image {
   background-color: transparent;
   image-orientation: from-image;
 }

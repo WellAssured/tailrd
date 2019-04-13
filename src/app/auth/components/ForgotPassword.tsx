@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { Button, Form, Input, Icon, Card } from 'antd';
 import { Auth } from 'aws-amplify';
-import { Redirect } from 'react-router';
-import { NavLink } from 'react-router-dom';
 
 import '../Auth.css';
+import { Redirect } from 'react-router';
 
-interface ILoginProps {
+interface IForgotProps {
   onLoginSuccess: () => void;
 }
-interface ILoginState {
+interface IForgotState {
+  loggedIn: boolean;
+  resetSuccess: boolean;
   needsToConfirm: boolean;
   isLoading: boolean;
-  loggedIn: boolean;
   username: string;
   password: string;
   confirmationCode: string;
@@ -27,7 +27,7 @@ interface ILoginState {
   };
 }
 
-const loginFormFields = [
+const forgotFormFields = [
   {
     'key': 'field-1', 'name': 'username', 'label': 'Username', 'icon': 'user',
     'type': 'text', 'placeholder': 'Jane Doe', 'autoComplete': 'name',
@@ -37,26 +37,17 @@ const loginFormFields = [
       }
       return { error: false };
     }
-  },
-  {
-    'key': 'field-2', 'name': 'password', 'label': 'Password', 'icon': 'lock',
-    'type': 'password', 'placeholder': 'Keep this safe', 'autoComplete': '',
-    'validate': (val: string) => {
-      if (val.length === 0) {
-        return { error: true, help: 'We\'ll need your Password so we know it\'s you.'};
-      }
-      return { error: false };
-    }
   }
 ];
+
 const confirmationFormFields = [
   {
-    'key': 'field-1', 'name': 'username', 'label': 'Username', 'icon': 'user',
-    'type': 'text', 'placeholder': 'Jane', 'autoComplete': 'given-name',
+    'key': 'field-1', 'name': 'password', 'label': 'Password', 'icon': 'lock',
+    'type': 'password', 'placeholder': 'Keep this safe', 'autoComplete': '',
     'validate': (val: string) => {
-      const minLength = 2;
+      const minLength = 6;
       if (val.length < minLength) {
-        return { error: true, help: `Sorry, your Name must be longer than ${minLength} characters`};
+        return { error: true, help: 'Your new password needs to be at least 6 characters'};
       }
       return { error: false };
     }
@@ -74,13 +65,14 @@ const confirmationFormFields = [
   }
 ];
 
-class Login extends React.Component<ILoginProps, ILoginState> {
-  constructor(props: ILoginProps) {
+class ForgotPassword extends React.Component<IForgotProps, IForgotState> {
+  constructor(props: IForgotProps) {
     super(props);
     this.state = {
+      loggedIn: false,
+      resetSuccess: false,
       needsToConfirm: false,
       isLoading: false,
-      loggedIn: false,
       username: '',
       password: '',
       confirmationCode: '',
@@ -96,12 +88,12 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     };
   }
 
-  validateForm = (fieldName?: string, formName: ('Login' | 'Confirmation') = 'Login') => {
+  validateForm = (fieldName?: string, formName: ('Forgot' | 'Confirmation') = 'Forgot') => {
     // validate form here
     let formValid = true;
     let formFeedback = this.state.formFeedback;
     // if formName is defined, use those fields. (defaults to Register)
-    const formFields = formName === 'Login' ? loginFormFields : confirmationFormFields;
+    const formFields = formName === 'Forgot' ? forgotFormFields : confirmationFormFields;
     // If inputName is defined, only validate the specified target
     const fieldsToValidate = fieldName ? formFields.filter(field => field.name === fieldName) : formFields;
     fieldsToValidate.forEach(field => {
@@ -120,63 +112,91 @@ class Login extends React.Component<ILoginProps, ILoginState> {
     this.setState({ formFeedback });
     return formValid;
   }
-
   handleChange = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     const inputName = e.currentTarget.name;
-    this.setState({ [inputName as keyof ILoginState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
+    this.setState({ [inputName as keyof IForgotState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
   }
   handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.validateForm()) {
       this.setState({ isLoading: true });
-      Auth.signIn(this.state.username, this.state.password)
-        .then(() => {
-          this.setState({ loggedIn: true, isLoading: false }, () => this.props.onLoginSuccess());
-        })
-        .catch((err: any) => {
-          if (err.code === 'UserNotConfirmedException') {
-            Auth.resendSignUp(this.state.username);
-            this.setState({ isLoading: false, needsToConfirm: true });
-          } else {
-            this.setState({ isLoading: false, formError: { hasError: true, message: err.message } });
-          }
-        });
+      Auth.forgotPassword(this.state.username)
+        .then(() => this.setState({ isLoading: false, needsToConfirm: true }))
+        .catch(err => this.setState({ isLoading: false, formError: { hasError: true, message: err.message } }));
     }
   }
+
   handleConfirm = (e: React.FormEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.state.isLoading) { return; }
     if (this.validateForm(undefined, 'Confirmation')) {
-      this.setState({ isLoading: true }, () => {
-        Auth.confirmSignUp(this.state.username, this.state.confirmationCode)
-        .then(data => {
-          console.log(data);
-          this.setState({ needsToConfirm: false, isLoading: false });
-        })
+      this.setState({ isLoading: true }, () =>
+        Auth.forgotPasswordSubmit(this.state.username, this.state.confirmationCode, this.state.password)
+        .then(() => this.setState({ needsToConfirm: false, isLoading: false, resetSuccess: true }))
         .catch((err: any) => {
-          console.log(err);
-          this.setState({ isLoading: false });
-        });
-      });
+          let message = '';
+          if (err.message === undefined) {
+            message = err;
+          } else {
+            switch (err.name) {
+            case 'CodeMismatchException':
+              message = 'Code does not match. Please try again.';
+              break;
+            case 'ExpiredCodeException':
+              message = 'Invalid Confirmation Code. Please request another code and try again.';
+              break;
+            case 'InvalidParameterException':
+              message = 'The password you entered is invalid. Please try again.';
+              break;
+            default:
+              message = 'Something went wrong. Please try again.';
+            }
+          }
+          this.setState({ isLoading: false, formError: { hasError: true, message } });
+        })
+      );
     }
   }
 
-  renderHeader = () => (
-    <div className="auth-form-header">
-      <div className="form-greeting">Welcome back!</div>
-      <NavLink to="/signup" className="form-nav-link">Need to Sign Up?</NavLink>
-    </div>
-  )
+  login = () => {
+    Auth.signIn(this.state.username, this.state.password).then(() =>
+      this.setState({ loggedIn: true, isLoading: false }, () => this.props.onLoginSuccess())
+    );
+  }
+
+  renderHeader = () => {
+    let headerText = 'Forgot Password';
+    if (this.state.resetSuccess) {
+      headerText = 'Password Reset Successful!';
+    } else if (this.state.needsToConfirm) {
+      headerText = 'Set New Password';
+    }
+
+    return (
+      <div className="auth-form-header">
+        <div className="form-greeting">{headerText}</div>
+        {
+          this.state.needsToConfirm ? 
+            <button
+              className="link-button-text form-nav-link"
+              onClick={() => this.setState({ needsToConfirm: false })}
+            >
+              Send another Code
+            </button>
+            : ''
+        }
+      </div>
+    );
+  }
 
   renderConfirmationForm = () => (
     <div className="auth-form">
-    <div className="signup-modal-title">
-      Looks like you still need to <span style={{ color: '#A78F5C' }}>confirm your email address.</span><br/>
-      We just resent you a <span style={{ color: '#A78F5C' }}>Confirmation Code</span> (may take a couple minutes). <br/>
-      Check your email and enter the <span style={{ color: '#A78F5C' }}>Code</span> here.
+      <div className="signup-modal-title">
+        We just sent you a <span style={{ color: '#A78F5C' }}>Confirmation Code</span> (may take a couple minutes). <br/>
+        Check your email and enter the <span style={{ color: '#A78F5C' }}>Code</span> with your <span style={{ color: '#A78F5C' }}>New Password</span> here.
+      </div>
       <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
-    </div>
       <Form layout="horizontal" onSubmit={this.handleConfirm}>
         {confirmationFormFields.map(field => (
           <Form.Item
@@ -202,18 +222,18 @@ class Login extends React.Component<ILoginProps, ILoginState> {
         <div className="form-submit">
           {this.state.isLoading ?
             <Button className="submit-button" loading={true} /> :
-            <Button className="submit-button" htmlType="submit">Confirm</Button>
+            <Button className="submit-button" htmlType="submit">Set</Button>
           }
         </div>
       </Form>
     </div>
   )
 
-  renderLoginForm = () => (
+  renderForgotForm = () => (
     <div className="auth-form">
       {this.state.formError.hasError && <div className="form-error-message">{this.state.formError.message}</div>}
       <Form layout="horizontal" onSubmit={this.handleSubmit}>
-        {loginFormFields.map(field => (
+        {forgotFormFields.map(field => (
           <Form.Item
             key={field.key}
             label={field.label}
@@ -237,24 +257,45 @@ class Login extends React.Component<ILoginProps, ILoginState> {
         <div className="form-submit">
           {this.state.isLoading ?
             <Button className="submit-button" loading={true} /> :
-            <Button className="submit-button" htmlType="submit">Sign In</Button>
+            <Button className="submit-button" htmlType="submit">Send</Button>
           }
           <div className="form-submit-link">
-            <NavLink to="/forgot" className="form-nav-link">Forgot your password?</NavLink>
+            We'll send you a verification code so you can set a new password
           </div>
         </div>
       </Form>
     </div>
   )
 
+  renderSuccessDialog = () => (
+    <div className="auth-form">
+      <div className="form-submit">
+          {this.state.isLoading ?
+            <Button className="submit-button" loading={true} /> :
+            <Button className="submit-button" onClick={this.login}>Sign In</Button>
+          }
+        </div>
+    </div>
+  )
+
+  renderForgotCardContents = () => {
+    if (this.state.resetSuccess) {
+      return this.renderSuccessDialog();
+    }
+    if (this.state.needsToConfirm) {
+      return this.renderConfirmationForm();
+    }
+    return this.renderForgotForm();
+  }
+
   render() {
     return (
-      this.state.loggedIn ?
+        this.state.loggedIn ?
         <Redirect to="chat" /> :
         (
           <div className="auth-container">
             <Card className="auth-card login-card" title={this.renderHeader()} bordered={false}>
-              {this.state.needsToConfirm ? this.renderConfirmationForm() : this.renderLoginForm()}
+              {this.renderForgotCardContents()}
             </Card>
           </div>
         )
@@ -262,4 +303,4 @@ class Login extends React.Component<ILoginProps, ILoginState> {
   }
 }
 
-export default Login;
+export default ForgotPassword;
