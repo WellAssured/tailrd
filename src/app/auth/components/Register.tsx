@@ -198,7 +198,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     const inputName = e.currentTarget.name;
     this.setState({ [inputName as keyof IRegisterState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
   }
-  handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.setState({ attemptedSubmit: true }, () => {
       if (this.validateForm()) {
@@ -222,7 +222,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
       }
     });
   }
-  handleConfirm = (e: React.FormEvent<HTMLInputElement>) => {
+  handleConfirm = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.validateForm(undefined, 'Confirmation')) {
       this.setState({ isLoading: true }, () => {

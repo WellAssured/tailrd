@@ -171,7 +171,7 @@ class MessageList extends React.Component<IMessageListProps, IMessageListState> 
                   `Message ${this.props.participants.find(p => p.username !== this.props.currentUser.getUsername())!.username}`
               }
               style={{textAlign: 'right'}}
-              autosize={{ maxRows: 6 }}
+              autoSize={{ maxRows: 6 }}
               onChange={this.handleInputChange}
               onKeyDown={this.handleInputKeyDown}
               autoFocus={true}

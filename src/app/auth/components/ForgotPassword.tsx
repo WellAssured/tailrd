@@ -117,7 +117,7 @@ class ForgotPassword extends React.Component<IForgotProps, IForgotState> {
     const inputName = e.currentTarget.name;
     this.setState({ [inputName as keyof IForgotState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
   }
-  handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.validateForm()) {
       this.setState({ isLoading: true });
@@ -127,7 +127,7 @@ class ForgotPassword extends React.Component<IForgotProps, IForgotState> {
     }
   }
 
-  handleConfirm = (e: React.FormEvent<HTMLInputElement>) => {
+  handleConfirm = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.state.isLoading) { return; }
     if (this.validateForm(undefined, 'Confirmation')) {
