@@ -35,9 +35,6 @@ const Navbar = (props: INavProps) => (
           /> :  
           <NavLink to="/signin" className="navbar-link" activeClassName="active-nav-link">Sign In</NavLink>
         }
-        { /*
-        <NavLink to="/signup" className="navbar-link navbar-link-action" activeClassName="active-nav-link">Sign Up</NavLink>
-        */ }
       </div>
     </Col>
   </Row>
