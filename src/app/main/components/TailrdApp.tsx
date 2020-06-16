@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { loadStripe } from '@stripe/stripe-js';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import { Auth, graphqlOperation } from 'aws-amplify';
 import { Connect } from 'aws-amplify-react';
@@ -15,6 +16,9 @@ interface IState {
 }
 
 interface IProps {}
+
+/* "pk_test_pH3IH8yggawrqA1ugA7S4AY0" pk_live_nyU4JjYtdyGidg7DGyXVYoxo */
+const stripePromise = loadStripe('pk_test_pH3IH8yggawrqA1ugA7S4AY0');
 
 class TailrdApp extends React.Component<IProps, IState> {
   constructor(props: IProps) {
@@ -37,7 +41,13 @@ class TailrdApp extends React.Component<IProps, IState> {
         <div className="tailRD-app">
           <Navbar isSignedIn={this.state.authenticated} onSignOut={() => this.logout()} />
           <Switch>
-            <Route exact={true} path="/" render={() => <VanitySite authenticated={this.state.authenticated} onRegisterSuccess={this.onLogin} />} />
+            <Route
+              exact={true}
+              path="/"
+              render={() =>
+                <VanitySite authenticated={this.state.authenticated} stripe={stripePromise} onRegisterSuccess={this.onLogin} />
+              }
+            />
             <Route
               path="/chat"
               render={p =>
@@ -66,7 +76,7 @@ class TailrdApp extends React.Component<IProps, IState> {
               render={props => 
                 this.state.authenticated ?
                 <Redirect to="/chat" /> :
-                <Register inModal={false} {...props} onRegisterSuccess={this.onLogin} />
+                <Register stripe={stripePromise} inModal={false} {...props} onRegisterSuccess={this.onLogin} />
               }
             />
             <Route

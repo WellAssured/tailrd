@@ -2,14 +2,12 @@ import * as React from 'react';
 import axios from 'axios';
 import { Button } from 'antd';
 import {
+  ElementsConsumer,
   CardNumberElement,
   CardExpiryElement,
-  CardCVCElement,
-  // PostalCodeElement,
-  // PaymentRequestButtonElement,
-  injectStripe,
-  ReactStripeElements
-} from 'react-stripe-elements';
+  CardCvcElement
+} from '@stripe/react-stripe-js';
+import { StripeElements, Stripe } from '@stripe/stripe-js';
 
 const checkoutStyle = {
   base: {
@@ -26,7 +24,9 @@ const checkoutStyle = {
   },
 };
 
-interface ICheckoutFormProps extends ReactStripeElements.InjectedStripeProps {
+interface ICheckoutFormProps {
+  elements: StripeElements | null;
+  stripe: Stripe | null;
   username: string;
   email: string;
   chargeAmount: { code: string; label: string; amount: number; description: string };
@@ -47,13 +47,14 @@ const defaultCheckoutFormState = { paymentSuccess: false, isLoading: false, form
 class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormState> {
   constructor(props: ICheckoutFormProps) {
     super(props);
-
     this.state = defaultCheckoutFormState;
   }
 
   submitPaymentRequest = () => {
+
     this.setState({ isLoading: true, formError: defaultCheckoutFormState.formError });
-    this.props.stripe!.createToken().then(stripeToken => {
+    const cardElement = this.props.elements!.getElement(CardNumberElement)!;
+    this.props.stripe!.createToken(cardElement).then(stripeToken => {
       if (stripeToken.error) {
         this.setState({
           isLoading: false,
@@ -95,16 +96,16 @@ class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormStat
         {this.state.formError.hasError && <div className="form-error-message">{this.state.formError.message}</div>}
         <label className="card-input-number">
           Card Number
-          <CardNumberElement className="card-input card-input-number" style={checkoutStyle} />
+          <CardNumberElement className="card-input card-input-number" options={{style: checkoutStyle}} />
         </label>
         <div className="card-info">
           <label className="card-input-exp">
             Expiration
-            <CardExpiryElement className="card-input" style={checkoutStyle} />
+            <CardExpiryElement className="card-input" options={{style: checkoutStyle}} />
           </label>
           <label className="card-input-cvc">
             CVC
-            <CardCVCElement placeholder="000" className="card-input" style={checkoutStyle} />
+            <CardCvcElement className="card-input" options={{style: checkoutStyle, placeholder: '000'}} />
           </label>
         </div>
         {/* <label>Zip Code<PostalCodeElement style={checkoutStyle} /></label> */}
@@ -124,4 +125,12 @@ class CheckoutForm extends React.Component<ICheckoutFormProps, ICheckoutFormStat
   }
 }
 
-export default injectStripe(CheckoutForm);
+export default props => {
+  return (
+    <ElementsConsumer>
+      {({elements, stripe}) => (
+        <CheckoutForm elements={elements} stripe={stripe} {...props} />
+      )}
+    </ElementsConsumer>
+  );
+};

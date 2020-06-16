@@ -6,6 +6,7 @@ import { Register } from '../../auth';
 import HeroSection from '../components/Hero/HeroSection';
 import HookSection from '../components/Hook/HookSection';
 import HowSection from '../components/How/HowSection';
+import { Stripe } from '@stripe/stripe-js';
 
 const questionRotationDuration = 5000;  // in ms
 const QUESTION_BANK = [
@@ -20,6 +21,7 @@ const QUESTION_BANK = [
 
 interface IProps {
   authenticated: boolean;
+  stripe: Promise<Stripe | null>;
   onRegisterSuccess: () => void;
 }
 
@@ -78,6 +80,7 @@ class ContentContainer extends React.Component<IProps, IState> {
           visible={this.state.showSignupModal}
           onClose={this.handleSignupClose}
           inModal={true}
+          stripe={this.props.stripe}
           onRegisterSuccess={this.props.onRegisterSuccess}
         />
       </div>          

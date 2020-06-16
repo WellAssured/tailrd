@@ -2,7 +2,8 @@ import * as React from 'react';
 import { Modal, Button, Form, Input, Icon, Card } from 'antd';
 import { Auth } from 'aws-amplify';
 import { NavLink, Redirect } from 'react-router-dom';
-import { Elements, StripeProvider } from 'react-stripe-elements';
+import { Stripe } from '@stripe/stripe-js';
+import { Elements } from '@stripe/react-stripe-js';
 
 import StripeCheckoutForm from './StripeCheckoutForm';
 
@@ -11,6 +12,7 @@ import '../Auth.css';
 interface IRegisterProps {
   inModal: boolean;
   visible?: boolean;
+  stripe: Promise<Stripe | null>;
   onClose?: () => void;
   onRegisterSuccess: () => void;
 }
@@ -198,7 +200,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     const inputName = e.currentTarget.name;
     this.setState({ [inputName as keyof IRegisterState]: e.currentTarget.value } as any, () => this.validateForm(inputName));
   }
-  handleSubmit = (e: React.FormEvent<HTMLInputElement>) => {
+  handleSubmit = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     this.setState({ attemptedSubmit: true }, () => {
       if (this.validateForm()) {
@@ -222,7 +224,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
       }
     });
   }
-  handleConfirm = (e: React.FormEvent<HTMLInputElement>) => {
+  handleConfirm = (e: React.FormEvent<HTMLFormElement> | React.KeyboardEvent<HTMLInputElement>) => {
     e.preventDefault();
     if (this.validateForm(undefined, 'Confirmation')) {
       this.setState({ isLoading: true }, () => {
@@ -276,7 +278,7 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
     }
     return (<span><span style={{ fontWeight: 500, color: '#A78F5C' }}>{chargeAmount.label}</span>.</span>);
   }
-  /* "pk_test_pH3IH8yggawrqA1ugA7S4AY0" pk_live_nyU4JjYtdyGidg7DGyXVYoxo */
+  
   renderPaymentForm = () => (
     <div className="auth-form">
       <div className="signup-modal-title">
@@ -285,16 +287,14 @@ class Register extends React.Component<IRegisterProps, IRegisterState> {
         <div className="form-error-message">{this.state.formError.hasError ? this.state.formError.message : <br/>}</div>
       </div>
       { this.getChargeAmount().amount > 0 ?  // Only render payments form if we're charging them
-        <StripeProvider apiKey="pk_live_nyU4JjYtdyGidg7DGyXVYoxo"> 
-            <Elements>
-              <StripeCheckoutForm
-                username={this.state.username || 'Nemo'}
-                email={this.state.email || 'jwhite5672@gmail.com'}
-                chargeAmount={this.getChargeAmount()}
-                onPaymentSuccess={this.handlePaymentSuccess}
-              />
-            </Elements>
-        </StripeProvider>
+          <Elements stripe={this.props.stripe}>
+            <StripeCheckoutForm
+              username={this.state.username || 'Nemo'}
+              email={this.state.email || 'jwhite5672@gmail.com'}
+              chargeAmount={this.getChargeAmount()}
+              onPaymentSuccess={this.handlePaymentSuccess}
+            />
+          </Elements>
         :
         <div className="form-submit">
           <Button className="submit-button" onClick={this.handlePaymentSuccess}>Great!</Button>
